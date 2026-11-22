@@ -317,27 +317,45 @@ h2{margin:0;font-family:var(--display);font-size:clamp(2rem,4.6vw,3.1rem);line-h
 .op{align-self:center;justify-self:center;font-family:var(--display);font-weight:700;font-size:2.8rem;line-height:1;color:var(--honey)}
 @media(max-width:899px){.op{font-size:2.2rem;margin:-4px 0}}
 
-.build{display:grid;gap:26px;margin-top:64px}
-@media(min-width:900px){.build{grid-template-columns:1.08fr .92fr;gap:64px}}
-.scene-wrap{position:sticky;top:84px;z-index:2;align-self:start}
-@media(min-width:900px){.scene-wrap{top:max(90px,calc(50vh - 230px))}}
+/* how a beaver builds a game: the scene and its text stay pinned together in the middle of the screen, and scrolling only
+   turns the steps (each step sits beside its picture, with no empty stretch between steps) */
+.build{position:relative;margin-top:64px}
+.pin{display:grid;gap:22px;align-items:center}
+@media(min-width:900px){.pin{grid-template-columns:1.08fr .92fr;gap:64px}}
+.js .pin{position:sticky;top:max(90px,calc(50vh - 200px));z-index:2}
+/* big screens: a bigger scene, so the pinned story fills more of the screen */
+@media(min-width:1280px) and (min-height:900px){.tale .build{margin-inline:-70px}.js .pin{top:calc(50vh - 235px)}}
+.build-run{display:none}
+.js .build-run{display:block;height:190vh}
 .scene{position:relative;aspect-ratio:640/440;border-radius:28px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--lift);background:var(--sc-sky)}
 .scene svg{display:block;width:100%;height:100%}
 .sc-cap{position:absolute;left:14px;top:14px;margin:0;padding:6px 10px;border-radius:9px;background:rgba(21,24,29,.78);color:#F2EFE8;font-size:.66rem}
 .sc-cap b{font-weight:500;color:#F6D35B}
-.steps-col .eyebrow{margin:0}
-.steps{margin:0;padding:0;list-style:none}
-.step{min-height:62vh;display:flex;flex-direction:column;justify-content:center;padding:24px 0;transition:opacity .45s}
-.js .step{opacity:.25}
-.js .step.on{opacity:1}
+.steps-col .eyebrow{margin:0 0 6px}
+.steps{display:grid;margin:0;padding:0;list-style:none}
+.step{padding:10px 0}
+/* the five steps share one spot; the current one fades in, so the column never jumps */
+.js .steps>.step{grid-area:1/1;opacity:0;transform:translateY(16px);transition:opacity .35s,transform .5s var(--ease-out)}
+.js .steps>.step.on{opacity:1;transform:none}
 .step .num{color:var(--honey-ink)}
 .step h3{margin:10px 0 12px;font-family:var(--display);font-size:clamp(1.7rem,3vw,2.3rem);line-height:1.05;letter-spacing:var(--track-h2)}
 .step p{margin:0;color:var(--muted);max-width:40ch;font-size:1.08rem}
+/* five little bars: where you are in the story, and a jump to any step */
+.dots{display:none;gap:2px;margin:14px 0 0 -4px}
+.js .dots{display:flex}
+.dots button{width:38px;height:32px;padding:0 4px;border:0;background:none;cursor:pointer}
+.dots button::before{content:"";display:block;height:6px;border-radius:3px;background:var(--line);transition:background .3s}
+.dots button:hover::before{background:color-mix(in srgb,var(--honey) 55%,transparent)}
+.dots button.on::before{background:var(--honey)}
 @media(max-width:899px){
-  .scene-wrap{top:64px;margin:0 -22px;padding:10px 22px 12px;background-color:var(--bg);background-image:var(--grain);background-size:160px 160px}
-  .scene{max-width:520px;margin:0 auto;border-radius:22px}
-  .step{min-height:56vh}
+  .js .pin{top:72px;gap:10px}
+  .scene{width:100%;max-width:520px;margin:0 auto;border-radius:22px}
+  .js .build-run{height:170vh}
   .build{margin-top:48px}
+  .step{padding:4px 0}
+  .step h3{margin:6px 0 8px}
+  .step p{font-size:1rem}
+  .dots{margin-top:8px}
 }
 .story-end{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px 28px;margin-top:30px;padding:26px 28px;border:2px dashed var(--line);border-radius:24px}
 .story-end p{margin:0;font-family:var(--display);font-weight:700;font-size:clamp(1.4rem,3vw,2rem);line-height:1.1}
@@ -785,8 +803,8 @@ footer .legal{flex-basis:100%;margin:0;font-size:.84rem}
     </dl>
   </div>
 
-  <div class="build">
-    <div class="scene-wrap">
+  <div class="build" id="build">
+    <div class="pin" id="pin">
       <div class="scene pausable g1 g2 g3 g4 g5" id="scene" data-step="5" aria-hidden="true">
         <svg viewBox="0 0 640 440">
           <rect class="sc-sky" width="640" height="440"/>
@@ -853,7 +871,6 @@ footer .legal{flex-basis:100%;margin:0;font-size:.84rem}
         <img class="floaty" src="img/lizardlick-badge.webp" width="192" height="192" alt="" loading="lazy" style="--x:34%;--dl:.55s;--fd:-2.4s">
         <p class="sc-cap mono">Step <b id="sc-n">5</b> / 5</p>
       </div>
-    </div>
     <div class="steps-col">
       <p class="eyebrow mono"><i></i>How a beaver builds a game</p>
       <ol class="steps" id="steps">
@@ -863,7 +880,12 @@ footer .legal{flex-basis:100%;margin:0;font-size:.84rem}
         <li class="step" data-step="4"><span class="num mono">04</span><h3>Test the water</h3><p>A beaver checks every inch of its dam for leaks. Before a game comes out, real players test it, and every leak they find gets patched: a bug, an unfair level, a boring moment. Each one gets our full attention, until that moment is perfect.</p></li>
         <li class="step" data-step="5"><span class="num mono">05</span><h3>Make a pond</h3><p>When the dam holds, a pond forms and the whole forest comes to visit. Our games are that pond: a place you will want to come back to, for a few clever minutes every day.</p></li>
       </ol>
+      <div class="dots" id="dots" role="group" aria-label="Story steps">
+        <button type="button" data-k="1" aria-label="Step 1: Pick the right tree"></button><button type="button" data-k="2" aria-label="Step 2: Gnaw it into shape"></button><button type="button" data-k="3" aria-label="Step 3: Stack it, log by log"></button><button type="button" data-k="4" aria-label="Step 4: Test the water"></button><button type="button" data-k="5" aria-label="Step 5: Make a pond"></button>
+      </div>
     </div>
+    </div>
+    <i class="build-run" aria-hidden="true"></i>
   </div>
   <div class="story-end rv">
     <p>And then? <b>The teeth keep growing.</b></p>
@@ -1064,6 +1086,7 @@ footer .legal{flex-basis:100%;margin:0;font-size:.84rem}
     var y = scrollY, h = document.documentElement.scrollHeight - innerHeight;
     top.classList.toggle("scrolled", y > 8);
     bar.style.transform = "scaleX(" + (h > 0 ? Math.min(y / h, 1) : 0).toFixed(4) + ")";
+    storyScroll();
   }
   addEventListener("scroll", function(){ if (!ticking){ ticking = true; requestAnimationFrame(onScroll); } }, {passive: true});
   onScroll();
@@ -1224,17 +1247,39 @@ footer .legal{flex-basis:100%;margin:0;font-size:.84rem}
     });
   }
 
-  /* ---- about: the scene follows the step being read ---- */
+  /* ---- about: the scene and its text are pinned, and how far the page has scrolled through the story picks the step ---- */
   var scene = $("scene"), steps = document.querySelectorAll("#steps .step"), scN = $("sc-n");
+  var build = $("build"), pin = $("pin"), dotBtns = $("dots").querySelectorAll("button"), curStep = 0, stickTop = 0;
   function setStep(n){
+    curStep = n;
     var c = "scene pausable";
     for (var i = 1; i <= n; i++) c += " g" + i;
     if (scene.classList.contains("live")) c += " live";
     scene.className = c;
     scene.setAttribute("data-step", n);
     scN.textContent = n;
-    for (var k = 0; k < steps.length; k++) steps[k].classList.toggle("on", +steps[k].getAttribute("data-step") === n);
+    for (var k = 0; k < steps.length; k++) steps[k].classList.toggle("on", k + 1 === n);
+    for (var d = 0; d < dotBtns.length; d++){ dotBtns[d].classList.toggle("on", d + 1 === n); dotBtns[d].setAttribute("aria-current", d + 1 === n ? "step" : "false"); }
   }
+  function measureStory(){ stickTop = parseFloat(getComputedStyle(pin).top) || 0; }
+  function storyScroll(){
+    if (!build) return;
+    var r = build.getBoundingClientRect();
+    if (r.bottom < -100 || r.top > innerHeight + 100) return;
+    var run = build.offsetHeight - pin.offsetHeight, p = run > 0 ? (stickTop - r.top) / run : 1;
+    var n = Math.max(1, Math.min(5, Math.floor(p * 5) + 1));
+    if (n !== curStep) setStep(n);
+  }
+  $("dots").addEventListener("click", function(e){
+    var b = e.target.closest("button");
+    if (!b) return;
+    var r = build.getBoundingClientRect(), run = build.offsetHeight - pin.offsetHeight;
+    scrollTo({top: Math.round(scrollY + r.top - stickTop + run * (+b.getAttribute("data-k") - .5) / 5), behavior: calm ? "auto" : "smooth"});
+  });
+  measureStory();
+  setStep(1);
+  storyScroll();
+  addEventListener("resize", function(){ measureStory(); storyScroll(); });
 
   /* while the page scrolls, everything that moves on its own holds still */
   var hushers = [pond, jungle, flies, night, scene, lantern].filter(Boolean), hushT = 0, hushed = false;
@@ -1252,7 +1297,6 @@ footer .legal{flex-basis:100%;margin:0;font-size:.84rem}
     return;
   }
   root.classList.add("io");
-  setStep(1);
   var rv = new IntersectionObserver(function(es){ es.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add("in"); rv.unobserve(e.target); } }); }, {threshold: .12});
   document.querySelectorAll(".rv,#sign").forEach(function(el){ rv.observe(el); });
   var live = new IntersectionObserver(function(es){ es.forEach(function(e){
@@ -1261,10 +1305,6 @@ footer .legal{flex-basis:100%;margin:0;font-size:.84rem}
   }); }, {rootMargin: "60px"});
   document.querySelectorAll(".pausable").forEach(function(el){ if (el !== flies) live.observe(el); });
   flies.classList.add("live");
-  var wide = matchMedia("(min-width: 900px)").matches;
-  var stepIO = new IntersectionObserver(function(es){ es.forEach(function(e){ if (e.isIntersecting) setStep(+e.target.getAttribute("data-step")); }); },
-    {rootMargin: wide ? "-46% 0px -46% 0px" : "-62% 0px -30% 0px"});
-  steps.forEach(function(s){ stepIO.observe(s); });
   var links = {};
   document.querySelectorAll('.top nav a').forEach(function(a){ links[a.getAttribute("href").slice(1)] = a; });
   var spy = new IntersectionObserver(function(es){ es.forEach(function(e){
