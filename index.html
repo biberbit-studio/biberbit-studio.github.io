@@ -4,7 +4,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>BiberBit Studio</title>
-<meta name="description" content="An independent studio making colourful brain games for Android, just right for a few spare minutes.">
 <link rel="canonical" href="https://biberbit.com/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="BiberBit Studio">
@@ -12,23 +11,26 @@
 <meta property="og:url" content="https://biberbit.com/">
 <meta property="og:image" content="https://biberbit.com/img/og.png">
 <meta name="twitter:card" content="summary_large_image">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<meta name="description" content="An independent studio making colourful brain games for Android, just right for a few spare minutes.">
 <meta name="theme-color" id="theme-color" content="#F2EFE8">
 <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="img/favicon-48.png" type="image/png" sizes="48x48">
-<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<link rel="preload" href="fonts/BiberDisplay-Bold.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/SpaceGrotesk.woff" as="font" type="font/woff" crossorigin>
 <script>
-/* the theme is set before the page paints: the visitor's saved choice, else the device setting */
+/* the colour mode is set before the page paints: the visitor's saved choice (light, dark or biber), else the device setting */
 (function(){
   var r = document.documentElement, t = null;
   try { t = localStorage.getItem("theme"); } catch (e) {}
-  if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  if (t !== "light" && t !== "dark" && t !== "biber") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
   r.setAttribute("data-theme", t);
   r.classList.add("js");
-  document.getElementById("theme-color").setAttribute("content", t === "dark" ? "#15181D" : "#F2EFE8");
+  document.getElementById("theme-color").setAttribute("content", {light: "#F2EFE8", dark: "#15181D", biber: "#0F2A2E"}[t]);
 })();
 </script>
 <style>
+@font-face{font-family:"Biber Display";src:url(fonts/BiberDisplay-Bold.woff2) format("woff2"),url(fonts/BiberDisplay-Bold.woff) format("woff");font-weight:700;font-display:swap}
 @font-face{font-family:"Space Grotesk";src:url(fonts/SpaceGrotesk.woff) format("woff");font-weight:300 700;font-display:swap}
 @font-face{font-family:"JetBrains Mono";src:url(fonts/JetBrainsMono.woff) format("woff");font-weight:500;font-display:swap}
 
@@ -40,16 +42,34 @@
   --vault:#15181D;--vault-line:rgba(240,163,60,.35);
   --sans:"Space Grotesk",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
   --mono:"JetBrains Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+  --display:"Biber Display",var(--sans);
+  --track-h1:-.012em;--track-h2:-.012em;
   --ease-out:cubic-bezier(.2,.8,.2,1);--spring:cubic-bezier(.3,1.5,.5,1);
+  /* background art: tree rings of gnawed logs, and a faint paper grain */
+  --rings-a:url(img/rings-a-light.webp);--rings-b:url(img/rings-b-light.webp);--rings-c:url(img/rings-c-light.webp);--grain:url(img/grain-light.png);
+  /* the about scene */
+  --sc-sky:#FBF6EA;--sc-hill:#F0E3C8;--sc-bank:#E6D3AC;--sc-water:#8FCFD6;--sc-ripple:#D9F1F2;--sc-trunk:#A0611B;--sc-leaf:#7DB46C;--sc-leaf2:#5E9A52;
+  --sc-log:#C9873A;--sc-logend:#EBC587;--sc-logring:#A0611B;--sc-beaver:#15181D;--sc-reed:#6E9A57;--sc-cat:#8B5A2B;
 }
-/* dark: chosen with the switch, or the device setting when the page has no choice yet (no script) */
 :root[data-theme="dark"]{--bg:#15181D;--paper:#1C2026;--ink:#F2EFE8;--muted:#A9AFB8;--honey-ink:#F0A33C;
   --line:rgba(242,239,232,.13);--grid:rgba(242,239,232,.035);--band:#F0A33C;--band-text:#15181D;--band-muted:#3B3322;--band-sep:#15181D;
-  --lift:0 1px 0 rgba(0,0,0,.2),0 22px 44px -26px rgba(0,0,0,.8);--vault:#0E1013;--vault-line:rgba(240,163,60,.45)}
+  --lift:0 1px 0 rgba(0,0,0,.2),0 22px 44px -26px rgba(0,0,0,.8);--vault:#0E1013;--vault-line:rgba(240,163,60,.45);
+  --rings-a:url(img/rings-a-dark.webp);--rings-b:url(img/rings-b-dark.webp);--rings-c:url(img/rings-c-dark.webp);--grain:url(img/grain-dark.png);
+  --sc-sky:#1E2A31;--sc-hill:#24343B;--sc-bank:#3A3328;--sc-water:#2E6E7B;--sc-ripple:#4C93A0;--sc-trunk:#B8721C;--sc-leaf:#4F8A48;--sc-leaf2:#3E7239;
+  --sc-log:#A9671F;--sc-logend:#D9A55A;--sc-logring:#7A4A10;--sc-beaver:#090B0E;--sc-reed:#4F7A43;--sc-cat:#8B5A2B}
+/* Biber mode: the pond at dusk, when beavers get to work. Warm and soft on the eyes: no bright white, little blue */
+:root[data-theme="biber"]{--bg:#0F2A2E;--paper:#163539;--ink:#F6EAD3;--muted:#B8C7C0;--honey:#F5B14E;--honey-ink:#F5B14E;
+  --line:rgba(246,234,211,.15);--grid:rgba(246,234,211,.04);--band:#F5B14E;--band-text:#0F2A2E;--band-muted:#4A3A1E;--band-sep:#0F2A2E;
+  --lift:0 1px 0 rgba(0,0,0,.25),0 24px 46px -26px rgba(0,0,0,.85);--vault:#0A1F22;--vault-line:rgba(245,177,78,.45);
+  --rings-a:url(img/rings-a-biber.webp);--rings-b:url(img/rings-b-biber.webp);--rings-c:url(img/rings-c-biber.webp);--grain:url(img/grain-dark.png);
+  --sc-sky:#1D3E44;--sc-hill:#24494F;--sc-bank:#3B3427;--sc-water:#2E7480;--sc-ripple:#5BA3AE;--sc-trunk:#B8721C;--sc-leaf:#4F8A48;--sc-leaf2:#3E7239;
+  --sc-log:#A9671F;--sc-logend:#E0AE60;--sc-logring:#7A4A10;--sc-beaver:#081315;--sc-reed:#4F7A43;--sc-cat:#9A6630;
+  color-scheme:dark}
 @media (prefers-color-scheme:dark){
   :root:not([data-theme]){--bg:#15181D;--paper:#1C2026;--ink:#F2EFE8;--muted:#A9AFB8;--honey-ink:#F0A33C;
     --line:rgba(242,239,232,.13);--grid:rgba(242,239,232,.035);--band:#F0A33C;--band-text:#15181D;--band-muted:#3B3322;--band-sep:#15181D;
-    --lift:0 1px 0 rgba(0,0,0,.2),0 22px 44px -26px rgba(0,0,0,.8);--vault:#0E1013;--vault-line:rgba(240,163,60,.45)}
+    --lift:0 1px 0 rgba(0,0,0,.2),0 22px 44px -26px rgba(0,0,0,.8);--vault:#0E1013;--vault-line:rgba(240,163,60,.45);
+    --rings-a:url(img/rings-a-dark.webp);--rings-b:url(img/rings-b-dark.webp);--rings-c:url(img/rings-c-dark.webp);--grain:url(img/grain-dark.png)}
 }
 .switching,.switching *{transition:background-color .3s,color .3s,border-color .3s!important}
 
@@ -58,9 +78,7 @@
 html{scroll-behavior:smooth;scroll-padding-top:80px;overflow-x:hidden}
 @supports (overflow:clip){html,body{overflow-x:clip}}
 body{margin:0;font-family:var(--sans);font-size:17px;line-height:1.6;color:var(--ink);-webkit-font-smoothing:antialiased;
-  background-color:var(--bg);
-  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
-  background-size:32px 32px}
+  background-color:var(--bg);background-image:var(--grain);background-size:160px 160px}
 img{display:block;max-width:100%;height:auto}
 a{color:inherit}
 button{font:inherit;color:inherit}
@@ -70,6 +88,15 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--honey);outline-offs
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 .skip{position:absolute;left:12px;top:-60px;z-index:50;padding:12px 16px;border-radius:12px;background:var(--ink);color:var(--bg);font-weight:600;text-decoration:none;transition:top .2s}
 .skip:focus{top:12px}
+
+/* tree rings behind the sections: cut ends of logs, partly off the edge */
+.stumpy{position:relative;overflow-x:clip}
+.stumpy::before,.stumpy::after{content:"";position:absolute;z-index:-1;pointer-events:none;background:no-repeat center/contain;aspect-ratio:1}
+.hero.stumpy::before{background-image:var(--rings-a);width:min(1060px,125vw);right:max(-340px,-30vw);top:-200px}
+.hero.stumpy::after{background-image:var(--rings-c);width:min(560px,80vw);left:-250px;bottom:-230px}
+#games.stumpy::before{background-image:var(--rings-b);width:820px;left:-500px;top:24%}
+.tale.stumpy::before{background-image:var(--rings-a);width:980px;right:-560px;top:34%}
+footer.stumpy::before{background-image:var(--rings-b);width:720px;right:-250px;bottom:-360px}
 
 /* ---------- top bar ---------- */
 .top{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--line);transition:box-shadow .3s}
@@ -88,16 +115,16 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--honey);outline-offs
 .top nav a[aria-current="true"]::after{content:"";position:absolute;left:12px;right:12px;bottom:4px;height:3px;border-radius:2px;background:var(--honey)}
 .progress{position:absolute;left:0;right:0;bottom:-1px;height:3px;background:var(--honey);transform-origin:0 50%;transform:scaleX(0)}
 @media(max-width:560px){.top nav a:not(.keep){display:none}.top .wrap{gap:8px}.top nav a{padding:10px 8px}}
-/* the light / dark switch: a pill with a sun and a moon, the honey knob sits on the current one */
-.theme{position:relative;flex:none;display:flex;align-items:center;justify-content:space-between;width:86px;height:44px;padding:0 12px;
-  border-radius:999px;border:1.5px solid var(--line);background:var(--paper);cursor:pointer;box-shadow:var(--lift)}
-.theme svg{position:relative;z-index:1;width:20px;height:20px;transition:color .25s}
-.theme .knob{position:absolute;top:4px;left:4px;width:34px;height:34px;border-radius:50%;background:var(--honey);transition:transform .35s var(--spring)}
-.theme .sun{color:#15181D}
-[data-theme="dark"] .theme .knob{transform:translateX(41px)}
-[data-theme="dark"] .theme .sun{color:var(--muted)}
-[data-theme="dark"] .theme .moon{color:#15181D}
-.theme:hover .knob{box-shadow:0 0 0 4px color-mix(in srgb,var(--honey) 30%,transparent)}
+/* the colour switch: light, dark and Biber mode; the honey knob sits on the current one */
+.theme{position:relative;flex:none;display:flex;width:134px;height:44px;padding:3px;border-radius:999px;border:1.5px solid var(--line);background:var(--paper);box-shadow:var(--lift)}
+.theme .knob{position:absolute;top:3px;left:3px;width:calc((100% - 6px) / 3);height:calc(100% - 6px);border-radius:999px;background:var(--honey);transition:transform .35s var(--spring)}
+.theme button{position:relative;z-index:1;flex:1;display:grid;place-items:center;padding:0;border:0;border-radius:999px;background:none;color:var(--muted);cursor:pointer;transition:color .25s}
+.theme button[aria-checked="true"]{color:#15181D}
+.theme svg{width:20px;height:20px}
+.theme .bmode{width:22px;height:22px}
+[data-theme="dark"] .theme .knob{transform:translateX(100%)}
+[data-theme="biber"] .theme .knob{transform:translateX(200%)}
+.theme button:hover:not([aria-checked="true"]){color:var(--ink)}
 
 /* ---------- hero ---------- */
 .hero{padding:56px 0 64px}
@@ -105,15 +132,15 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--honey);outline-offs
 .eyebrow{display:flex;align-items:center;gap:10px;margin:0 0 20px;color:var(--muted)}
 .eyebrow i{width:10px;height:10px;border-radius:2px;background:var(--honey);flex:none}
 .eyebrow b{font-weight:500;color:var(--honey-ink)}
-h1{margin:0;font-size:clamp(2.7rem,7vw,4.8rem);line-height:1;font-weight:700;letter-spacing:-.04em;text-wrap:balance}
+h1{margin:0;font-family:var(--display);font-size:clamp(2.6rem,6.6vw,4.6rem);line-height:1.02;font-weight:700;letter-spacing:var(--track-h1)}
 /* the last word takes turns: bite, brain, twist, heart */
 .rot{display:inline-grid;vertical-align:bottom;padding:0 .06em;
   background:linear-gradient(transparent 60%,var(--honey) 60%,var(--honey) 90%,transparent 90%)}
 .rot span{grid-area:1/1;opacity:0;transform:translateY(.5em)}
 .rot span.on{opacity:1;transform:none;transition:opacity .45s var(--ease-out),transform .45s var(--ease-out)}
 .rot span.out{opacity:0;transform:translateY(-.5em);transition:opacity .3s,transform .3s}
-.no-js .rot span:first-child,html:not(.js) .rot span:first-child{opacity:1;transform:none}
-[data-theme="dark"] .rot{color:var(--honey);background:none}
+html:not(.js) .rot span:first-child{opacity:1;transform:none}
+[data-theme="dark"] .rot,[data-theme="biber"] .rot{color:var(--honey);background:none}
 @media (prefers-color-scheme:dark){:root:not([data-theme]) .rot{color:var(--honey);background:none}}
 .lead{font-size:clamp(1.08rem,2vw,1.26rem);color:var(--muted);max-width:34ch;margin:22px 0 30px}
 .actions{display:flex;flex-wrap:wrap;gap:12px}
@@ -145,7 +172,6 @@ h1{margin:0;font-size:clamp(2.7rem,7vw,4.8rem);line-height:1;font-weight:700;let
 .pop{position:absolute;left:50%;top:46%;width:14px;height:14px;margin:-7px;border-radius:3px;background:var(--honey);pointer-events:none;animation:pop .75s var(--ease-out) forwards}
 .pop.o{background:none;border:2.5px solid var(--honey)}
 @keyframes pop{to{transform:translate(var(--dx),var(--dy)) rotate(160deg) scale(.3);opacity:0}}
-/* the speech bubble and the "tap me" hint */
 .bubble{position:absolute;right:-2%;top:-4%;z-index:3;max-width:210px;padding:10px 14px;border-radius:16px 16px 16px 4px;background:var(--ink);color:var(--bg);
   font-weight:600;font-size:.95rem;line-height:1.3;box-shadow:var(--lift);opacity:0;transform:translateY(8px) scale(.9);transform-origin:0 100%;transition:opacity .25s,transform .3s var(--spring);pointer-events:none}
 .bubble.show{opacity:1;transform:none;pointer-events:auto}
@@ -164,15 +190,15 @@ h1{margin:0;font-size:clamp(2.7rem,7vw,4.8rem);line-height:1;font-weight:700;let
 
 /* ---------- ticker ---------- */
 .ticker{overflow:hidden;background:var(--band);color:var(--band-text);transform:rotate(-1.4deg);margin:0 -2vw;padding:14px 0;border-block:2px solid var(--ink)}
-[data-theme="dark"] .ticker{border-color:var(--band)}
+[data-theme="dark"] .ticker,[data-theme="biber"] .ticker{border-color:var(--band)}
 .ticker .track{display:flex;width:max-content;animation:slide 60s linear infinite}
-.ticker span{display:flex;align-items:center;gap:22px;padding-right:22px;font-family:var(--mono);font-weight:500;font-size:clamp(.82rem,1.6vw,1rem);letter-spacing:.16em;text-transform:uppercase;white-space:nowrap}
+.ticker span{display:flex;align-items:center;gap:22px;padding-right:22px;font-family:var(--display);font-weight:700;font-size:clamp(1rem,1.9vw,1.25rem);letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
 .ticker span::after{content:"";width:10px;height:10px;border-radius:2px;background:var(--band-sep)}
 @keyframes slide{to{transform:translateX(-50%)}}
 
 /* ---------- sections ---------- */
 section{padding:72px 0}
-h2{margin:0;font-size:clamp(2rem,4.6vw,3.1rem);line-height:1.05;font-weight:700;letter-spacing:-.035em;text-wrap:balance}
+h2{margin:0;font-family:var(--display);font-size:clamp(2rem,4.6vw,3.1rem);line-height:1.05;font-weight:700;letter-spacing:var(--track-h2);text-wrap:balance}
 .head{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:12px 30px;margin-bottom:30px}
 .head p:not(.eyebrow){margin:0;color:var(--muted);max-width:42ch}
 
@@ -185,7 +211,6 @@ h2{margin:0;font-size:clamp(2rem,4.6vw,3.1rem);line-height:1.05;font-weight:700;
 .shot>img:first-child{width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease-out)}
 .game:hover .shot>img:first-child{transform:scale(1.05)}
 .tag{position:absolute;left:14px;top:14px;z-index:2;padding:6px 10px;border-radius:9px;background:rgba(21,24,29,.78);color:#F2EFE8}
-/* a phone with real gameplay peeks out of the card and rises when you point at it */
 .peek{position:absolute;right:7%;top:58%;z-index:1;width:23%;border-radius:14px;border:3px solid #15181D;box-shadow:0 18px 30px -12px rgba(0,0,0,.6);transform:rotate(6deg);transition:transform .5s var(--spring)}
 .game:hover .peek,.game:focus-within .peek{transform:translateY(-52%) rotate(2deg)}
 @media(hover:none){.peek{transform:translateY(-22%) rotate(5deg)}}
@@ -193,7 +218,7 @@ h2{margin:0;font-size:clamp(2rem,4.6vw,3.1rem);line-height:1.05;font-weight:700;
 .id{display:flex;align-items:center;gap:14px}
 .id img{width:58px;height:58px;border-radius:15px;flex:none;transition:transform .35s var(--spring)}
 .game:hover .id img{transform:rotate(-6deg) scale(1.06)}
-.id h3{margin:0;font-size:1.45rem;line-height:1.1;letter-spacing:-.02em}
+.id h3{margin:0;font-family:var(--display);font-size:1.55rem;line-height:1.05;letter-spacing:var(--track-h2)}
 .id p{margin:4px 0 0;color:var(--muted)}
 .desc{margin:16px 0 16px}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px;padding:0;list-style:none}
@@ -206,17 +231,16 @@ h2{margin:0;font-size:clamp(2rem,4.6vw,3.1rem);line-height:1.05;font-weight:700;
 .text-link{font-weight:500;color:var(--muted);text-underline-offset:3px;padding:10px 0}
 .text-link:hover{color:var(--ink)}
 
-/* the workshop: locked boxes, nothing named yet */
 .workshop{grid-column:1/-1;display:grid;gap:22px;align-items:center;padding:26px;border:2px dashed var(--line);border-radius:24px;transition:border-color .4s,box-shadow .4s}
 .workshop.lit{border-color:var(--honey);box-shadow:0 0 0 6px color-mix(in srgb,var(--honey) 22%,transparent)}
 @media(min-width:760px){.workshop{grid-template-columns:1fr auto}}
 .workshop .eyebrow{margin-bottom:10px}
-.workshop h3{margin:0 0 6px;font-size:1.5rem;letter-spacing:-.02em}
+.workshop h3{margin:0 0 6px;font-family:var(--display);font-size:1.6rem;letter-spacing:var(--track-h2)}
 .workshop p{margin:0;color:var(--muted)}
 .vault{display:flex;gap:12px;margin:0;padding:0;list-style:none}
 .vault li{position:relative;width:96px;aspect-ratio:3/4;display:grid;place-items:center;border-radius:16px;background:var(--vault);border:1.5px solid var(--vault-line);overflow:hidden;transition:transform .35s var(--spring)}
 .vault li::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(135deg,transparent 0 10px,rgba(240,163,60,.07) 10px 20px)}
-.vault b{position:relative;font-family:var(--mono);font-weight:500;font-size:2.4rem;color:var(--honey);line-height:1}
+.vault b{position:relative;font-family:var(--display);font-weight:700;font-size:2.6rem;color:var(--honey);line-height:1}
 .vault small{position:absolute;bottom:9px;left:0;right:0;text-align:center;color:#A9AFB8;font-size:.56rem;letter-spacing:.2em}
 .vault li:nth-child(2){transform:translateY(-8px)}
 .vault li:hover{transform:translateY(-6px) rotate(-3deg)}
@@ -231,10 +255,7 @@ h2{margin:0;font-size:clamp(2rem,4.6vw,3.1rem);line-height:1.05;font-weight:700;
 .teaser .tag{pointer-events:none}
 .say{position:absolute;left:12px;bottom:12px;z-index:4;max-width:calc(100% - 24px);padding:6px 10px;border-radius:9px;background:rgba(10,14,20,.78);color:#F2EFE8;font-size:.68rem;pointer-events:none}
 .say b{font-weight:500}
-/* Odd Fish: one fish in the school is not like the others */
 .pond{background:#1f5560}
-/* slow drifts move in whole-pixel steps: smooth to the eye, but no redraw for sub-pixel changes on every frame
-   (Firefox without hardware acceleration redraws the whole scene for each one) */
 .fish{position:absolute;left:var(--x);top:var(--y);z-index:1;width:10.5%;cursor:pointer;animation:swim var(--d,5s) steps(8) var(--dl,0s) infinite}
 .fish::before{content:"";position:absolute;inset:-25% -10%}
 .fish img{width:100%;transition:transform .3s var(--spring),opacity .3s}
@@ -246,13 +267,11 @@ h2{margin:0;font-size:clamp(2rem,4.6vw,3.1rem);line-height:1.05;font-weight:700;
 @keyframes swim{0%,100%{transform:translate(0,0) rotate(0)}35%{transform:translate(7px,-4px) rotate(-3deg)}70%{transform:translate(-5px,3px) rotate(2deg)}}
 @keyframes nope{20%,60%{transform:translateX(-5px)}40%,80%{transform:translateX(5px)}}
 @keyframes ring{from{transform:scale(.4);opacity:0}}
-/* Lizard Lick: lick only the bug that matches your colour */
 .jungle{background:#0b2224}
 .cham{position:absolute;left:5%;bottom:22.4%;z-index:2;display:block;width:29%;aspect-ratio:330/198}
 .cham img{position:absolute;left:0;top:0;width:100%;opacity:0;transition:opacity .3s}
 .cham img.on{opacity:1}
 .cham.nope{animation:nope .45s}
-/* the tongue starts at the front of the snout (measured by studio_teasers.py) */
 .mouth,.tongue,.tip{position:absolute;left:98.7%;top:28.8%;z-index:3;pointer-events:none}
 .tongue{width:100px;height:8px;margin-top:-4px;border-radius:4px;background:#FF6B9D;transform-origin:0 50%;transform:scaleX(0);transition:transform .14s cubic-bezier(.3,.7,.4,1)}
 .tip{width:18px;height:18px;margin:-9px 0 0 -9px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#FFA8C8,#FF3D7F 70%);transform:scale(0);transition:transform .14s cubic-bezier(.3,.7,.4,1)}
@@ -271,9 +290,7 @@ h2{margin:0;font-size:clamp(2rem,4.6vw,3.1rem);line-height:1.05;font-weight:700;
 @keyframes flyC{0%,100%{transform:translate(0,0)}35%{transform:translate(50%,60%)}70%{transform:translate(-40%,30%)}}
 .plus{position:absolute;z-index:4;font-family:var(--mono);font-weight:500;font-size:.85rem;color:#F6D35B;pointer-events:none;animation:plus .9s var(--ease-out) forwards}
 @keyframes plus{to{transform:translateY(-30px);opacity:0}}
-/* while the page scrolls the teasers hold still (scrolling is the busiest moment for a slow machine) */
-.teaser.hush *{animation-play-state:paused!important}
-/* phones: a taller scene, smaller labels, bigger fish and bugs to tap */
+.teaser.hush *,.hush *{animation-play-state:paused!important}
 @media(max-width:560px){
   .game.soon .teaser{aspect-ratio:16/10}
   .teaser .tag{left:10px;top:10px;padding:4px 8px;font-size:.62rem}
@@ -282,23 +299,120 @@ h2{margin:0;font-size:clamp(2rem,4.6vw,3.1rem);line-height:1.05;font-weight:700;
   .bug{width:calc(var(--w,8.5%) * 1.3)}
 }
 
-/* ---------- about ---------- */
-.about .wrap{display:grid;gap:34px}
-@media(min-width:900px){.about .wrap{grid-template-columns:.9fr 1.1fr;gap:70px}}
-.story>p:not(.eyebrow){color:var(--muted);margin:20px 0 0;max-width:46ch}
-.story blockquote{position:relative;margin:28px 0 0;padding:18px 20px 18px 24px;border-left:4px solid var(--honey);border-radius:0 16px 16px 0;
-  background:var(--paper);font-size:1.16rem;font-weight:600;line-height:1.45;letter-spacing:-.01em;max-width:44ch}
-.skills{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 0;padding:0;list-style:none}
-.skills li{display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;border:1px solid var(--line);color:var(--ink);background:var(--paper);font-size:.7rem;transition:border-color .25s,transform .25s var(--spring)}
-.skills li::before{content:"";width:7px;height:7px;border-radius:2px;background:var(--honey)}
-.skills li:hover{border-color:var(--honey);transform:translateY(-2px)}
-@media(min-width:900px){.about .points{align-self:center}}
-.points{display:grid;gap:14px;margin:0;padding:0;list-style:none}
-.points li{display:grid;grid-template-columns:auto 1fr;gap:4px 18px;padding:20px 22px;background:var(--paper);border:1px solid var(--line);border-radius:18px;transition:transform .3s var(--ease-out),border-color .3s}
-.points li:hover{transform:translateX(6px);border-color:color-mix(in srgb,var(--honey) 55%,transparent)}
-.points b{grid-row:span 2;font-family:var(--mono);font-weight:500;font-size:.9rem;color:var(--honey-ink);padding-top:3px}
-.points h3{margin:0;font-size:1.15rem;letter-spacing:-.01em}
-.points p{margin:0;color:var(--muted)}
+/* ---------- about: the story of the name, and how a beaver builds a game ---------- */
+.story-head{max-width:780px}
+.lead2{color:var(--muted);font-size:clamp(1.08rem,2vw,1.22rem);margin:18px 0 0;max-width:46ch}
+/* Biber + Bit = BiberBit, written like three dictionary entries */
+.name-eq{display:grid;gap:12px;margin:34px 0 0;align-items:stretch}
+@media(min-width:900px){.name-eq{grid-template-columns:1fr auto 1fr auto 1.2fr;gap:16px}}
+.word{margin:0;padding:22px 22px 24px;background:var(--paper);border:1px solid var(--line);border-radius:22px;box-shadow:var(--lift)}
+.word dt{font-family:var(--display);font-weight:700;font-size:clamp(2rem,3.6vw,2.6rem);line-height:1;letter-spacing:var(--track-h2)}
+.word dd{margin:0}
+.word .ipa{margin:10px 0 12px;color:var(--honey-ink);font-size:.68rem;letter-spacing:.1em;text-transform:none}
+.word .def{color:var(--muted)}
+.word.main{background:var(--band);color:var(--band-text);border-color:transparent}
+.word.main dt span,.word.main .ipa{color:var(--band-sep)}
+.word.main .def{color:var(--band-muted)}
+[data-theme="dark"] .word.main .def,[data-theme="biber"] .word.main .def{color:var(--band-text);opacity:.82}
+.op{align-self:center;justify-self:center;font-family:var(--display);font-weight:700;font-size:2.8rem;line-height:1;color:var(--honey)}
+@media(max-width:899px){.op{font-size:2.2rem;margin:-4px 0}}
+
+.build{display:grid;gap:26px;margin-top:64px}
+@media(min-width:900px){.build{grid-template-columns:1.08fr .92fr;gap:64px}}
+.scene-wrap{position:sticky;top:84px;z-index:2;align-self:start}
+@media(min-width:900px){.scene-wrap{top:max(90px,calc(50vh - 230px))}}
+.scene{position:relative;aspect-ratio:640/440;border-radius:28px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--lift);background:var(--sc-sky)}
+.scene svg{display:block;width:100%;height:100%}
+.sc-cap{position:absolute;left:14px;top:14px;margin:0;padding:6px 10px;border-radius:9px;background:rgba(21,24,29,.78);color:#F2EFE8;font-size:.66rem}
+.sc-cap b{font-weight:500;color:#F6D35B}
+.steps-col .eyebrow{margin:0}
+.steps{margin:0;padding:0;list-style:none}
+.step{min-height:62vh;display:flex;flex-direction:column;justify-content:center;padding:24px 0;transition:opacity .45s}
+.js .step{opacity:.25}
+.js .step.on{opacity:1}
+.step .num{color:var(--honey-ink)}
+.step h3{margin:10px 0 12px;font-family:var(--display);font-size:clamp(1.7rem,3vw,2.3rem);line-height:1.05;letter-spacing:var(--track-h2)}
+.step p{margin:0;color:var(--muted);max-width:40ch;font-size:1.08rem}
+@media(max-width:899px){
+  .scene-wrap{top:64px;margin:0 -22px;padding:10px 22px 12px;background-color:var(--bg);background-image:var(--grain);background-size:160px 160px}
+  .scene{max-width:520px;margin:0 auto;border-radius:22px}
+  .step{min-height:56vh}
+  .build{margin-top:48px}
+}
+.story-end{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px 28px;margin-top:30px;padding:26px 28px;border:2px dashed var(--line);border-radius:24px}
+.story-end p{margin:0;font-family:var(--display);font-weight:700;font-size:clamp(1.4rem,3vw,2rem);line-height:1.1}
+.story-end b{color:var(--honey-ink)}
+
+/* the scene: a stream, a tree, a dam that grows step by step (data-step = the step on screen, g1..g5 = steps reached) */
+.sc-sky{fill:var(--sc-sky)}
+.sc-sun circle{fill:var(--honey)}
+.sc-moon{display:none}
+.sc-moon circle{fill:#F6EAD3}
+.sc-moon .bite{fill:var(--sc-sky)}
+[data-theme="dark"] .sc-sun,[data-theme="biber"] .sc-sun{display:none}
+[data-theme="dark"] .sc-moon,[data-theme="biber"] .sc-moon{display:inline}
+.sc-hill{fill:var(--sc-hill)}
+.sc-bank{fill:var(--sc-bank)}
+.sc-water,.sc-pond rect{fill:var(--sc-water)}
+.sc-pond{transform-origin:0 440px;transform:scaleY(.26);transition:transform 1.4s var(--ease-out)}
+.scene.g4 .sc-pond{transform:scaleY(.6)}
+.scene.g5 .sc-pond{transform:none}
+.sc-ripples rect{fill:var(--sc-ripple)}
+.sc-ripples{transform:translateY(104px);transition:transform 1.4s var(--ease-out)}
+.scene.g4 .sc-ripples{transform:translateY(56px)}
+.scene.g5 .sc-ripples{transform:none}
+.sc-reeds rect{fill:var(--sc-reed)}
+.sc-reeds .cat{fill:var(--sc-cat)}
+.sc-grass rect{fill:var(--sc-leaf)}
+.sc-tree .trunk{fill:var(--sc-trunk)}
+.sc-tree .crown{fill:var(--sc-leaf)}
+.sc-tree .leaf{fill:var(--sc-leaf2)}
+.sc-tree .notch{fill:var(--sc-sky);opacity:0;transition:opacity .3s}
+.sc-tree{transform-origin:541px 342px;transition:transform .8s cubic-bezier(.5,0,.75,0),opacity .3s}
+.scene[data-step="2"] .sc-tree{transform:rotate(-7deg)}
+.scene[data-step="2"] .sc-tree .notch{opacity:1}
+.scene.g3 .sc-tree{transform:rotate(-90deg);opacity:0;transition:transform .7s cubic-bezier(.5,0,.75,0),opacity .25s .55s}
+.sc-stump{opacity:0;transition:opacity .3s .45s}
+.sc-stump rect{fill:var(--sc-trunk)}
+.sc-stump ellipse{fill:var(--sc-logend)}
+.scene.g3 .sc-stump{opacity:1}
+.sc-chips rect{fill:var(--honey);opacity:0;transform-box:fill-box;transform-origin:center}
+.scene[data-step="2"] .sc-chips rect{animation:chip 1.3s steps(13) var(--cd,0s) infinite}
+@keyframes chip{0%{opacity:1;transform:translate(0,0) rotate(0)}100%{opacity:0;transform:translate(var(--cx),var(--cy)) rotate(220deg)}}
+.log rect{fill:var(--sc-log)}
+.log .end{fill:var(--sc-logend)}
+.log .ring{fill:none;stroke:var(--sc-logring);stroke-width:2}
+.log{transform:translateY(-340px);opacity:0;transition:transform .45s cubic-bezier(.5,0,.75,0),opacity .1s .35s}
+.scene.g3 .log{transform:none;opacity:1;transition:transform .6s var(--spring),opacity .1s}
+.scene.g3 .l1{transition-delay:.35s}.scene.g3 .l2{transition-delay:.5s}.scene.g3 .l3{transition-delay:.65s}.scene.g3 .l4{transition-delay:.8s}.scene.g3 .l5{transition-delay:.95s}
+.sc-drop{fill:var(--sc-water);opacity:0}
+.scene[data-step="4"] .sc-drop{animation:leak 1s .9s 2 both}
+@keyframes leak{0%{opacity:1;transform:translate(0,0)}100%{opacity:0;transform:translate(26px,44px)}}
+.patch{fill:var(--honey);transform-box:fill-box;transform-origin:center;transform:scale(0)}
+.scene.g4 .patch{transform:none;transition:transform .35s var(--spring) 2.9s}
+.sc-beaver{transform:translate(455px,340px);transition:transform .9s var(--ease-out)}
+.scene[data-step="2"] .sc-beaver{transform:translate(500px,340px)}
+.scene[data-step="3"] .sc-beaver{transform:translate(312px,294px);transition-delay:.9s}
+.scene[data-step="4"] .sc-beaver{transform:translate(462px,340px)}
+.scene[data-step="5"] .sc-beaver{transform:translate(312px,294px)}
+.bv .fur{fill:var(--sc-beaver)}
+.bv .eye,.bv .nose,.bv .tailbits{fill:var(--honey)}
+.bv .tooth{fill:#F2EFE8}
+.scene[data-step="2"] .headbob{animation:chomp .36s steps(2) infinite}
+@keyframes chomp{50%{transform:translateY(3px)}}
+.scene[data-step="5"] .bv{animation:hop2 .7s var(--spring) 1s}
+@keyframes hop2{40%{transform:translateY(-16px)}}
+.sc-idea rect{fill:var(--honey);opacity:0;transform-box:fill-box;transform-origin:center}
+.scene[data-step="1"] .sc-idea rect{animation:idea 2.4s steps(24) var(--cd,0s) infinite}
+@keyframes idea{0%{opacity:0;transform:translateY(8px) scale(.4)}20%{opacity:1;transform:none}70%{opacity:1;transform:translateY(-6px)}100%{opacity:0;transform:translateY(-14px)}}
+.sc-cloud rect{fill:#FFFFFF;opacity:.75}
+.sc-stars{display:none}
+.sc-stars rect{fill:#F6EAD3;opacity:.7}
+[data-theme="dark"] .sc-cloud,[data-theme="biber"] .sc-cloud{display:none}
+[data-theme="dark"] .sc-stars,[data-theme="biber"] .sc-stars{display:inline}
+.floaty{position:absolute;left:var(--x);top:59.5%;width:7.2%;border-radius:22%;box-shadow:0 6px 12px -6px rgba(0,0,0,.45);opacity:0;transform:translateY(40px) scale(.5);transition:transform .6s var(--spring),opacity .3s}
+.scene.g5 .floaty{opacity:1;transform:none;transition-delay:var(--dl);animation:floaty 3.2s steps(16) var(--fd) infinite}
+@keyframes floaty{50%{translate:0 -4px}}
 
 /* ---------- contact ---------- */
 .contact{padding-bottom:40px}
@@ -309,7 +423,7 @@ h2{margin:0;font-size:clamp(2rem,4.6vw,3.1rem);line-height:1.05;font-weight:700;
 .band>p{margin:14px 0 26px;color:var(--band-muted);max-width:40ch;font-size:1.08rem}
 .mail-row{position:relative;z-index:1;display:flex;flex-wrap:wrap;align-items:center;gap:14px 18px}
 .mail{display:inline-flex;align-items:center;gap:12px;font-size:clamp(1.25rem,3.4vw,2rem);font-weight:700;letter-spacing:-.02em;text-decoration:none;border-bottom:3px solid var(--honey);padding-bottom:4px;word-break:break-all}
-[data-theme="dark"] .mail{border-color:var(--band-text)}
+[data-theme="dark"] .mail,[data-theme="biber"] .mail{border-color:var(--band-text)}
 @media (prefers-color-scheme:dark){:root:not([data-theme]) .mail{border-color:var(--band-text)}}
 .copy{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border-radius:12px;border:1.5px solid currentColor;background:none;cursor:pointer;font-weight:600;opacity:.85;transition:opacity .2s,transform .2s var(--spring)}
 .copy:hover{opacity:1;transform:translateY(-2px)}
@@ -321,10 +435,9 @@ h2{margin:0;font-size:clamp(2rem,4.6vw,3.1rem);line-height:1.05;font-weight:700;
 /* ---------- footer ---------- */
 footer{padding:0 0 40px;color:var(--muted);font-size:.95rem;overflow:hidden}
 .sign{position:relative;padding-top:clamp(40px,7vw,70px)}
-.sign span{position:relative;display:inline-block;font-weight:700;font-size:clamp(4.4rem,19.5vw,15.5rem);line-height:.78;letter-spacing:-.055em;color:transparent;
+.sign span{position:relative;display:inline-block;font-family:var(--display);font-weight:700;font-size:clamp(4.2rem,18.5vw,15rem);line-height:.8;letter-spacing:-.01em;color:transparent;
   -webkit-text-stroke:1.5px color-mix(in srgb,var(--ink) 26%,transparent);user-select:none}
 .sign span em{font-style:normal;-webkit-text-stroke-color:var(--honey)}
-/* the beaver climbs onto the last letter when the footer comes into view */
 .peeker{position:absolute;right:.5%;top:0;width:.42em;height:auto;opacity:0;transform:translateY(30%) rotate(8deg);transition:transform .8s var(--spring),opacity .4s}
 .sign.in .peeker{opacity:1;transform:translateY(-72%) rotate(-4deg)}
 .foot{display:flex;flex-wrap:wrap;gap:14px 30px;align-items:center;justify-content:space-between;border-top:1px solid var(--line);margin-top:26px;padding-top:24px}
@@ -333,10 +446,101 @@ footer nav a{min-height:44px;display:inline-flex;align-items:center;text-underli
 footer nav a:hover{color:var(--ink)}
 footer .legal{flex-basis:100%;margin:0;font-size:.84rem}
 
+/* ---------- Biber mode: the pond at dusk ----------
+   almost everything here is still: a sky, a moon, rings, a log, a reflection. What moves is small (fireflies, a few twinkling
+   stars, one shooting star now and then), holds still while the page scrolls, and is thinned out on a slow machine (.biber-lite) */
+/* the dusk sky lives on the page itself, under every other layer (moon, stars and rings stay bright) */
+[data-theme="biber"] body{background-color:var(--bg);
+  background-image:radial-gradient(ellipse 820px 560px at 78% 390px,rgba(245,177,78,.15),transparent 70%),
+    linear-gradient(180deg,#12223A 0,rgba(18,34,58,.55) 420px,rgba(240,140,60,.09) 760px,rgba(15,42,46,0) 900px),var(--grain);
+  background-size:100% 1000px,100% 1000px,160px 160px;background-repeat:no-repeat,no-repeat,repeat}
+[data-theme="biber"] .top{background:#12223A}
+[data-theme="biber"] .contact{background:radial-gradient(ellipse 50% 60% at 50% 60%,rgba(245,177,78,.07),transparent 70%)}
+[data-theme="biber"] body{scrollbar-color:var(--honey) var(--bg)}
+[data-theme="biber"] ::selection{background:var(--honey);color:#0F2A2E}
+[data-theme="biber"] h1,[data-theme="biber"] h2{text-shadow:0 0 34px rgba(245,177,78,.22)}
+/* a beaver has nibbled a corner of the cards: two small circles in the page colour sit on the corner
+   (a mask looked the same but made Firefox redraw the animated teaser cards on every frame) */
+[data-theme="biber"] .game::after,[data-theme="biber"] .band::after{content:"";position:absolute;z-index:5;right:-9px;top:14px;width:28px;height:28px;border-radius:50%;
+  background:var(--bg);box-shadow:-19px -21px 0 -1px var(--bg);pointer-events:none}
+/* the ticker becomes a floating log */
+[data-theme="biber"] .ticker{background:repeating-linear-gradient(180deg,#F5B14E 0 5px,#EDA547 5px 7px,#F8BC5E 7px 12px,#E9A043 12px 13px);
+  box-shadow:inset 0 3px 0 rgba(255,236,190,.35),inset 0 -4px 0 rgba(90,50,10,.25),0 18px 30px -14px rgba(0,0,0,.6)}
+/* the night over the hero */
+.night{display:none;position:absolute;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+[data-theme="biber"] .night{display:block}
+.night .halo{position:absolute;right:calc(5% - 150px);top:-112px;width:400px;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(255,214,140,.22),rgba(245,177,78,.06) 45%,transparent 68%)}
+.night .moon{position:absolute;right:5%;top:40px;width:96px;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 38% 36%,#FFF6DC,#F7D893 55%,#E9B866);
+  -webkit-mask:radial-gradient(circle 30px at 96% 24%,transparent 97%,#000);mask:radial-gradient(circle 30px at 96% 24%,transparent 97%,#000)}
+.night .st{position:absolute;left:var(--x);top:var(--y);width:var(--s);height:var(--s);border-radius:1px;background:#FFF1CF;opacity:var(--o)}
+.night .st.tw{animation:twinkle var(--d) steps(8) var(--dl) infinite}
+@keyframes twinkle{0%,100%{opacity:var(--o)}50%{opacity:.06}}
+.night .constel{position:absolute;left:46%;top:6%;width:132px}
+.night .constel line{stroke:rgba(245,177,78,.4);stroke-width:1}
+.night .constel circle{fill:#FFE9B8}
+.night .constel .tw{animation:twinkle 3.4s steps(8) infinite;--o:1}
+.night .shoot{position:absolute;left:16%;top:9%;width:150px;height:2px;border-radius:2px;background:linear-gradient(90deg,transparent,#FFE9B8);opacity:0;transform:rotate(17deg);animation:shoot 17s linear 3s infinite}
+@keyframes shoot{0%,93%{opacity:0;translate:0 0}94%{opacity:1}98%,100%{opacity:0;translate:380px 116px}}
+@media(max-width:560px){
+  .night .constel{display:none}
+  .night .moon{width:62px;right:6%;top:16px;-webkit-mask:radial-gradient(circle 19px at 96% 24%,transparent 97%,#000);mask:radial-gradient(circle 19px at 96% 24%,transparent 97%,#000)}
+  .night .halo{width:260px;right:calc(6% - 99px);top:-83px}
+}
+/* fireflies in three depths, on their own fixed layer behind the page. Each one is its own small moving picture (will-change),
+   so a step of a firefly never makes the browser paint the page under it again (measured in Firefox without hardware acceleration) */
+.flies{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;display:none}
+.ff b{will-change:translate,opacity}
+[data-theme="biber"] .flies{display:block}
+.ff{position:absolute;left:var(--x);top:var(--y);transition:transform 1.8s var(--ease-out)}
+.ff b{display:block;width:var(--s);height:var(--s);margin:calc(var(--s) / -2) 0 0 calc(var(--s) / -2);border-radius:50%;
+  background:radial-gradient(circle,#FFF1C9 0 20%,rgba(245,177,78,.55) 42%,rgba(245,177,78,0) 70%);
+  animation:wander var(--d) steps(var(--n)) var(--dl) infinite,glow var(--g) steps(10) var(--dl) infinite}
+.ff.far b{animation-name:wander,glow-far}
+.ff.near b{background:radial-gradient(circle,rgba(255,226,160,.55) 0 14%,rgba(245,177,78,.16) 42%,rgba(245,177,78,0) 70%);animation-name:wander,glow-soft}
+@keyframes wander{0%,100%{translate:0 0}25%{translate:var(--ax) var(--ay)}50%{translate:var(--bx) var(--by)}75%{translate:var(--cx) var(--cy)}}
+@keyframes glow{0%,100%{opacity:.12}50%{opacity:1}}
+@keyframes glow-far{0%,100%{opacity:.08}50%{opacity:.6}}
+@keyframes glow-soft{0%,100%{opacity:.05}50%{opacity:.3}}
+/* a warm lantern follows the mouse and lights up the rings behind the page */
+.lantern{position:fixed;left:0;top:0;z-index:-1;width:380px;height:380px;border-radius:50%;pointer-events:none;opacity:0;display:none;
+  background:radial-gradient(circle,rgba(255,200,120,.17),rgba(245,177,78,.06) 38%,transparent 68%);transition:opacity .8s;will-change:transform}
+[data-theme="biber"] .lantern{display:block}
+.lantern.on{opacity:1}
+.lantern.hush{opacity:0;transition:none}
+@media(hover:none){.lantern{display:none!important}}
+/* every tap sends ripples across the water, and a few wood chips fly */
+.ripple{position:fixed;z-index:70;width:24px;height:24px;margin:-12px 0 0 -12px;pointer-events:none;color:var(--honey);opacity:0;animation:ripple 1.1s var(--ease-out) var(--rd,0s) forwards}
+.ripple svg{display:block;width:100%;height:100%;overflow:visible}
+@keyframes ripple{0%{opacity:.9;transform:scale(.4)}100%{opacity:0;transform:scale(var(--rs,5))}}
+.chip{position:fixed;z-index:70;width:7px;height:7px;margin:-3.5px;border-radius:2px;background:var(--honey);pointer-events:none;animation:chipfly .75s var(--ease-out) forwards}
+@keyframes chipfly{to{transform:translate(var(--dx),var(--dy)) rotate(160deg) scale(.3);opacity:0}}
+/* the big sign at the bottom is mirrored in the pond */
+.refl{display:none;height:.4em;overflow:hidden;margin-top:-5px;font-size:clamp(4.2rem,18.5vw,15rem);border-top:1px solid rgba(245,177,78,.45);
+  background:linear-gradient(180deg,rgba(245,177,78,.07),transparent 70%);
+  -webkit-mask:linear-gradient(180deg,#000,rgba(0,0,0,.35) 60%,transparent),repeating-linear-gradient(180deg,#000 0 8px,transparent 8px 11px);-webkit-mask-composite:source-in;
+  mask:linear-gradient(180deg,#000,rgba(0,0,0,.35) 60%,transparent),repeating-linear-gradient(180deg,#000 0 8px,transparent 8px 11px);mask-composite:intersect}
+[data-theme="biber"] .refl{display:block}
+/* flipped about the letters' baseline (.72em down the .8em line), so the mirror image starts right at the waterline */
+.refl span{display:block;width:max-content;line-height:.8;font-family:var(--display);font-weight:700;letter-spacing:-.01em;color:transparent;
+  transform-origin:50% 0;transform:translateY(.735em) scaleY(-1);-webkit-text-stroke:1.5px color-mix(in srgb,var(--ink) 34%,transparent);user-select:none}
+.refl span em{font-style:normal;-webkit-text-stroke-color:rgba(245,177,78,.9)}
+/* a short hello the first time Biber mode is chosen */
+.toast{position:fixed;left:50%;bottom:22px;z-index:85;width:max-content;max-width:min(92vw,680px);padding:12px 18px;border-radius:14px;background:#F5B14E;color:#0F2A2E;
+  font-weight:600;font-size:.95rem;line-height:1.35;box-shadow:0 14px 30px -12px rgba(0,0,0,.6);transform:translate(-50%,24px);opacity:0;transition:opacity .35s,transform .45s var(--spring);pointer-events:none}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:560px){.toast{bottom:58px;font-size:.88rem}}
+/* a new colour mode spreads out from its button, like dusk falling (browsers with view transitions) */
+::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
+::view-transition-new(root){animation:dusk .9s cubic-bezier(.45,0,.2,1)}
+@keyframes dusk{from{clip-path:circle(0 at var(--vx,92%) var(--vy,32px))}to{clip-path:circle(150vmax at var(--vx,92%) var(--vy,32px))}}
+/* a slow machine keeps the calm parts only */
+.biber-lite .ff.near,.biber-lite .lantern,.biber-lite .night .shoot{display:none!important}
+.biber-lite .night .st.tw,.biber-lite .night .constel .tw{animation:none}
+.biber-lite .flies .ff:nth-child(n+8){display:none}
+
 /* ---------- motion housekeeping ---------- */
 .js .rv{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .8s var(--ease-out)}
 .js .rv.in{opacity:1;transform:none}
-/* animations stop while their part of the page is off screen */
 .io .pausable:not(.live) *,.io .pausable:not(.live){animation-play-state:paused!important}
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
@@ -345,7 +549,11 @@ footer .legal{flex-basis:100%;margin:0;font-size:.84rem}
   .rot span{opacity:0}.rot span:first-child{opacity:1;transform:none}
   .peeker{opacity:1;transform:translateY(-72%)}
   .bug .f1{display:none}
+  .flies,.flies-near,.lantern{display:none!important}
+  ::view-transition-new(root){animation:none}
 }
+@media(max-width:560px){.sc-cap{left:10px;top:10px;padding:4px 8px;font-size:.58rem}}
+
 </style>
 </head>
 <body>
@@ -365,10 +573,18 @@ footer .legal{flex-basis:100%;margin:0;font-size:.84rem}
     <rect x="37" y="48" width="11" height="11" style="fill:var(--band)"/><rect x="72" y="48" width="11" height="11" style="fill:var(--band)"/>
     <rect x="43" y="66" width="34" height="15" rx="5" style="fill:var(--band)"/>
   </symbol>
+  <!-- the beaver head in one colour, with see-through eyes and mouth (Biber mode button) -->
+  <symbol id="i-beaver-mono" viewBox="0 0 120 120">
+    <path fill="currentColor" fill-rule="evenodd" d="M18 22V17a5 5 0 0 1 5-5h8a5 5 0 0 1 5 5v5zM84 22V17a5 5 0 0 1 5-5h8a5 5 0 0 1 5 5v5zM42 22h36a28 28 0 0 1 28 28v30a28 28 0 0 1-28 28H42a28 28 0 0 1-28-28V50a28 28 0 0 1 28-28zM35 46h14v14H35zM71 46h14v14H71zM48 66h24a5 5 0 0 1 5 5v5a5 5 0 0 1-5 5H48a5 5 0 0 1-5-5v-5a5 5 0 0 1 5-5zM49 81h10v14H49zM61 81h10v14H61z"/>
+  </symbol>
   <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
   <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 </svg>
+
+<div class="flies pausable" id="flies" aria-hidden="true"></div>
+<i class="lantern" id="lantern" aria-hidden="true"></i>
+<p class="toast" id="toast" role="status"></p>
 
 <header class="top" id="top"><div class="wrap">
   <a class="brand" href="#" aria-label="BiberBit Studio, back to top">
@@ -380,16 +596,23 @@ footer .legal{flex-basis:100%;margin:0;font-size:.84rem}
     <a href="#about">About</a>
     <a href="#contact">Contact</a>
   </nav>
-  <button class="theme" id="theme" type="button" aria-label="Dark mode" aria-pressed="false">
-    <i class="knob"></i>
-    <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="currentColor"/><path d="M12 2.5v2.6M12 18.9v2.6M2.5 12h2.6M18.9 12h2.6M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-    <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6z" fill="currentColor"/></svg>
-  </button>
+  <div class="theme" id="theme" role="radiogroup" aria-label="Colour mode">
+    <i class="knob" aria-hidden="true"></i>
+    <button type="button" role="radio" data-t="light" aria-checked="false" aria-label="Light mode" title="Light mode">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="currentColor"/><path d="M12 2.5v2.6M12 18.9v2.6M2.5 12h2.6M18.9 12h2.6M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <button type="button" role="radio" data-t="dark" aria-checked="false" aria-label="Dark mode" title="Dark mode">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6z" fill="currentColor"/></svg>
+    </button>
+    <button type="button" role="radio" data-t="biber" aria-checked="false" aria-label="Biber mode: the pond at dusk" title="Biber mode: the pond at dusk">
+      <svg class="bmode" viewBox="0 0 120 120" aria-hidden="true"><use href="#i-beaver-mono"/></svg>
+    </button>
+  </div>
   <i class="progress" id="progress"></i>
 </div></header>
 
 <main>
-<section class="hero pausable"><div class="wrap">
+<section class="hero pausable stumpy"><div class="night" id="night" aria-hidden="true"></div><div class="wrap">
   <div>
     <p class="eyebrow mono"><i></i>Independent game studio</p>
     <h1><span class="vh">Small games with a big bite.</span><span aria-hidden="true">Small games with a&nbsp;big <span class="rot" id="rot"><span class="on">bite</span><span>brain</span><span>twist</span><span>heart</span></span>.</span></h1>
@@ -428,7 +651,7 @@ footer .legal{flex-basis:100%;margin:0;font-size:.84rem}
   <span>Sort planets</span><span>Spot the odd fish</span><span>Swat bugs</span><span>Lick the right bug</span><span>Beat bosses</span><span>Grow flowers</span><span>Clear lines</span><span>Train your brain</span><span>Collect everything</span>
 </div></div>
 
-<section id="games"><div class="wrap">
+<section id="games" class="stumpy"><div class="wrap">
   <div class="head rv">
     <div>
       <p class="eyebrow mono"><i></i><b>01</b> Games</p>
@@ -536,24 +759,118 @@ footer .legal{flex-basis:100%;margin:0;font-size:.84rem}
   </div>
 </div></section>
 
-<section class="about" id="about"><div class="wrap">
-  <div class="rv story">
+<section class="tale stumpy" id="about"><div class="wrap">
+  <div class="story-head rv">
     <p class="eyebrow mono"><i></i><b>02</b> About</p>
-    <h2>A small studio that loves to build.</h2>
-    <p>BiberBit is an independent studio. Like the beaver in our logo, we keep building, one game at a time, until it feels good to play.</p>
-    <p>What drives us is the moment a puzzle clicks: you pause, look again, spot the pattern and suddenly see three moves ahead. We build every level around that moment.</p>
-    <blockquote>We believe a good brain game is a small workout for the mind, wrapped in something colourful enough that it never feels like homework.</blockquote>
-    <ul class="skills mono" aria-label="What our games ask of you">
-      <li>Planning ahead</li><li>Pattern spotting</li><li>Memory</li><li>Focus</li><li>Patience</li>
-    </ul>
+    <h2>We build games the way beavers build dams.</h2>
+    <p class="lead2">Bit by bit, log by log, until it holds. It is right there in our name.</p>
   </div>
-  <ul class="points">
-    <li class="rv"><b>01</b><h3>Thinking is the fun part</h3><p>The best moment in a game is when you figure something out. We design for that moment, not for mindless tapping.</p></li>
-    <li class="rv" style="transition-delay:.06s"><b>02</b><h3>A stretch for your logic</h3><p>Plan a few moves ahead, remember what you saw, stay focused under pressure: every level asks a little more of you.</p></li>
-    <li class="rv" style="transition-delay:.12s"><b>03</b><h3>Easy to start, deep to master</h3><p>Every game starts simple and teaches as you play, then keeps finding new ways to make you think.</p></li>
-    <li class="rv" style="transition-delay:.18s"><b>04</b><h3>Surprise keeps you sharp</h3><p>Bosses, new twists and daily challenges mean your brain never runs on autopilot.</p></li>
-  </ul>
+  <div class="name-eq rv" role="group" aria-label="Biber plus Bit equals BiberBit">
+    <dl class="word">
+      <dt>Biber</dt>
+      <dd class="ipa mono">/&#712;bi&#720;b&#592;/ &middot; German, noun</dd>
+      <dd class="def">A beaver. Its teeth never stop growing, so it never stops building.</dd>
+    </dl>
+    <span class="op" aria-hidden="true">+</span>
+    <dl class="word">
+      <dt>Bit</dt>
+      <dd class="ipa mono">/b&#618;t/ &middot; noun</dd>
+      <dd class="def">The smallest piece of a game. Also: a small bite.</dd>
+    </dl>
+    <span class="op" aria-hidden="true">=</span>
+    <dl class="word main">
+      <dt>Biber<span>Bit</span></dt>
+      <dd class="ipa mono">a small games studio</dd>
+      <dd class="def">Brain games built the beaver way: one bit at a time, until they hold.</dd>
+    </dl>
+  </div>
+
+  <div class="build">
+    <div class="scene-wrap">
+      <div class="scene pausable g1 g2 g3 g4 g5" id="scene" data-step="5" aria-hidden="true">
+        <svg viewBox="0 0 640 440">
+          <rect class="sc-sky" width="640" height="440"/>
+          <g class="sc-sun"><circle cx="262" cy="92" r="32"/></g>
+          <g class="sc-moon"><circle cx="262" cy="92" r="27"/><circle class="bite" cx="276" cy="82" r="23"/></g>
+          <g class="sc-cloud"><rect x="330" y="78" width="118" height="34" rx="17"/><rect x="356" y="58" width="62" height="36" rx="18"/><rect x="40" y="168" width="76" height="24" rx="12"/><rect x="58" y="154" width="38" height="24" rx="12"/></g>
+          <g class="sc-stars"><rect x="300" y="60" width="5" height="5" rx="1"/><rect x="410" y="110" width="4" height="4" rx="1"/><rect x="460" y="44" width="5" height="5" rx="1"/><rect x="90" y="150" width="4" height="4" rx="1"/><rect x="250" y="130" width="4" height="4" rx="1"/><rect x="600" y="70" width="5" height="5" rx="1"/><rect x="30" y="60" width="4" height="4" rx="1"/></g>
+          <path class="sc-hill" d="M0 300C110 252 214 268 318 286S520 246 640 276V440H0Z"/>
+          <g class="sc-pond"><rect x="0" y="300" width="300" height="140"/></g>
+          <g class="sc-ripples"><rect x="96" y="306" width="54" height="5" rx="2.5"/><rect x="188" y="316" width="34" height="5" rx="2.5"/></g>
+          <rect class="sc-water" x="300" y="404" width="150" height="36"/>
+          <g class="sc-reeds">
+            <rect x="22" y="252" width="6" height="188" rx="3"/><rect x="19" y="232" width="12" height="40" rx="6" class="cat"/>
+            <rect x="44" y="282" width="6" height="158" rx="3"/><rect x="41" y="266" width="12" height="36" rx="6" class="cat"/>
+            <rect x="64" y="304" width="5" height="136" rx="2.5"/>
+          </g>
+          <path class="sc-bank" d="M436 440V356Q436 340 452 340H640V440Z"/>
+          <g class="sc-grass"><rect x="470" y="330" width="5" height="12" rx="2"/><rect x="478" y="326" width="5" height="16" rx="2"/><rect x="600" y="328" width="5" height="14" rx="2"/><rect x="608" y="332" width="5" height="10" rx="2"/></g>
+          <g class="sc-stump"><rect x="528" y="326" width="26" height="16" rx="3"/><ellipse cx="541" cy="326" rx="13" ry="4"/></g>
+          <g class="sc-tree">
+            <rect class="trunk" x="528" y="200" width="26" height="142" rx="7"/>
+            <path class="notch" d="M528 316l11 8-11 8zM554 316l-11 8 11 8z"/>
+            <rect class="crown" x="476" y="102" width="130" height="118" rx="44"/>
+            <rect class="leaf" x="500" y="128" width="16" height="16" rx="3"/><rect class="leaf" x="548" y="120" width="13" height="13" rx="3"/>
+            <rect class="leaf" x="574" y="160" width="15" height="15" rx="3"/><rect class="leaf" x="516" y="176" width="12" height="12" rx="3"/>
+            <rect class="leaf" x="490" y="164" width="10" height="10" rx="2"/>
+          </g>
+          <g class="sc-chips">
+            <rect x="536" y="318" width="9" height="9" rx="2" style="--cx:-46px;--cy:-34px"/>
+            <rect x="538" y="320" width="7" height="7" rx="2" style="--cx:-30px;--cy:-58px;--cd:-.3s"/>
+            <rect x="534" y="322" width="8" height="8" rx="2" style="--cx:40px;--cy:-40px;--cd:-.6s"/>
+            <rect x="540" y="318" width="6" height="6" rx="2" style="--cx:26px;--cy:-62px;--cd:-.9s"/>
+            <rect x="536" y="320" width="9" height="9" rx="2" style="--cx:-58px;--cy:-12px;--cd:-.45s"/>
+            <rect x="538" y="322" width="7" height="7" rx="2" style="--cx:52px;--cy:-14px;--cd:-1.1s"/>
+          </g>
+          <g class="sc-dam">
+            <g class="log l1"><rect x="222" y="406" width="170" height="30" rx="15"/><circle class="end" cx="377" cy="421" r="15"/><circle class="ring" cx="377" cy="421" r="9"/><circle class="ring" cx="377" cy="421" r="3"/></g>
+            <g class="log l2"><rect x="238" y="378" width="150" height="30" rx="15"/><circle class="end" cx="373" cy="393" r="15"/><circle class="ring" cx="373" cy="393" r="9"/><circle class="ring" cx="373" cy="393" r="3"/></g>
+            <g class="log l3"><rect x="226" y="350" width="156" height="30" rx="15"/><circle class="end" cx="367" cy="365" r="15"/><circle class="ring" cx="367" cy="365" r="9"/><circle class="ring" cx="367" cy="365" r="3"/></g>
+            <g class="log l4"><rect x="250" y="322" width="124" height="30" rx="15"/><circle class="end" cx="359" cy="337" r="15"/><circle class="ring" cx="359" cy="337" r="9"/><circle class="ring" cx="359" cy="337" r="3"/></g>
+            <g class="log l5"><rect x="268" y="294" width="92" height="30" rx="15"/><circle class="end" cx="345" cy="309" r="15"/><circle class="ring" cx="345" cy="309" r="9"/><circle class="ring" cx="345" cy="309" r="3"/></g>
+            <rect class="patch" x="378" y="370" width="14" height="14" rx="3"/>
+          </g>
+          <rect class="sc-drop" x="382" y="374" width="9" height="11" rx="4"/>
+          <g class="sc-beaver">
+            <g class="bv">
+              <rect class="fur" x="14" y="-30" width="48" height="22" rx="8" transform="rotate(-12 14 -19)"/>
+              <g class="tailbits" transform="rotate(-12 14 -19)"><rect x="26" y="-26" width="5" height="5" rx="1"/><rect x="34" y="-26" width="5" height="5" rx="1"/><rect x="42" y="-26" width="5" height="5" rx="1"/><rect x="26" y="-18" width="5" height="5" rx="1"/><rect x="34" y="-18" width="5" height="5" rx="1"/><rect x="42" y="-18" width="5" height="5" rx="1"/></g>
+              <rect class="fur" x="-30" y="-64" width="60" height="64" rx="24"/>
+              <g class="headbob"><g transform="translate(-30 -116) scale(.5)">
+                <rect class="fur" x="18" y="12" width="18" height="18" rx="5"/><rect class="fur" x="84" y="12" width="18" height="18" rx="5"/>
+                <rect class="fur" x="14" y="22" width="92" height="86" rx="28"/>
+                <rect class="eye" x="37" y="48" width="11" height="11"/><rect class="eye" x="72" y="48" width="11" height="11"/>
+                <rect class="nose" x="43" y="66" width="34" height="15" rx="5"/>
+                <rect class="tooth" x="49" y="79" width="10" height="17"/><rect class="tooth" x="61" y="79" width="10" height="17"/>
+              </g></g>
+            </g>
+            <g class="sc-idea"><rect x="-30" y="-150" width="10" height="10" rx="2"/><rect x="-6" y="-162" width="12" height="12" rx="2" style="--cd:-.8s"/><rect x="18" y="-148" width="9" height="9" rx="2" style="--cd:-1.6s"/></g>
+          </g>
+        </svg>
+        <img class="floaty" src="img/cosmicpods-icon.webp" width="192" height="192" alt="" loading="lazy" style="--x:11.5%;--dl:.1s;--fd:0s">
+        <img class="floaty" src="img/bugsandblocks-icon.webp" width="192" height="192" alt="" loading="lazy" style="--x:19%;--dl:.25s;--fd:-.8s">
+        <img class="floaty" src="img/oddfish-badge.webp" width="192" height="192" alt="" loading="lazy" style="--x:26.5%;--dl:.4s;--fd:-1.6s">
+        <img class="floaty" src="img/lizardlick-badge.webp" width="192" height="192" alt="" loading="lazy" style="--x:34%;--dl:.55s;--fd:-2.4s">
+        <p class="sc-cap mono">Step <b id="sc-n">5</b> / 5</p>
+      </div>
+    </div>
+    <div class="steps-col">
+      <p class="eyebrow mono"><i></i>How a beaver builds a game</p>
+      <ol class="steps" id="steps">
+        <li class="step" data-step="1"><span class="num mono">01</span><h3>Pick the right tree</h3><p>A forest has thousands of trees, and a beaver picks only the special ones. Ideas are like trees: the real skill is choosing the one that turns into a game that makes your brain work, and makes that work fun.</p></li>
+        <li class="step" data-step="2"><span class="num mono">02</span><h3>Gnaw it into shape</h3><p>A beaver gnaws, bite after bite, until the tree comes down. We build a rough first version and play it over and over, until it clicks: that moment you suddenly see the way through.</p></li>
+        <li class="step" data-step="3"><span class="num mono">03</span><h3>Stack it, log by log</h3><p>A dam goes up one log at a time. A game goes up one level at a time: puzzles, bosses, sounds and secrets. CosmicPods alone has 1000 levels and 100 bosses, with 1000 more levels coming soon.</p></li>
+        <li class="step" data-step="4"><span class="num mono">04</span><h3>Test the water</h3><p>A beaver checks every inch of its dam for leaks. Before a game comes out, real players test it, and every leak they find gets patched: a bug, an unfair level, a boring moment. Each one gets our full attention, until that moment is perfect.</p></li>
+        <li class="step" data-step="5"><span class="num mono">05</span><h3>Make a pond</h3><p>When the dam holds, a pond forms and the whole forest comes to visit. Our games are that pond: a place you will want to come back to, for a few clever minutes every day.</p></li>
+      </ol>
+    </div>
+  </div>
+  <div class="story-end rv">
+    <p>And then? <b>The teeth keep growing.</b></p>
+    <a class="btn ghost" href="#workshop" id="to-workshop">Peek at the workshop <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+  </div>
 </div></section>
+
 
 <section class="contact" id="contact"><div class="wrap">
   <div class="band rv">
@@ -570,10 +887,11 @@ footer .legal{flex-basis:100%;margin:0;font-size:.84rem}
 </div></section>
 </main>
 
-<footer class="pausable"><div class="wrap">
+<footer class="pausable stumpy"><div class="wrap">
   <div class="sign" id="sign" aria-hidden="true">
     <span>Biber<em>Bit</em><svg class="peeker" viewBox="0 0 120 120"><use href="#i-beaver"/></svg></span>
   </div>
+  <div class="refl" aria-hidden="true"><span>Biber<em>Bit</em></span></div>
   <div class="foot">
     <a class="brand" href="#" aria-label="BiberBit Studio, back to top">
       <svg aria-hidden="true"><use href="#i-beaver"/></svg>
@@ -584,9 +902,10 @@ footer .legal{flex-basis:100%;margin:0;font-size:.84rem}
       <a href="bugs-and-blocks-privacy.html">Bugs &amp; Blocks privacy</a>
       <a href="mailto:support@biberbit.com">support@biberbit.com</a>
     </nav>
-    <p class="legal">&copy; 2026 BiberBit Studio. Google Play and Android are trademarks of Google LLC.</p>
+    <p class="legal">&copy; 2026 BiberBit Studio&trade;. All rights reserved. Google Play and Android are trademarks of Google LLC.</p>
   </div>
 </div></footer>
+
 
 <script>
 (function(){
@@ -594,25 +913,149 @@ footer .legal{flex-basis:100%;margin:0;font-size:.84rem}
   var root = document.documentElement;
   function $(id){ return document.getElementById(id); }
 
-  /* ---- light / dark ---- */
-  var sw = $("theme");
+  /* ---- light / dark / Biber mode ---- */
+  var COLORS = {light: "#F2EFE8", dark: "#15181D", biber: "#0F2A2E"}, ORDER = ["light", "dark", "biber"];
+  var sw = $("theme"), modeBtns = sw.querySelectorAll("button");
   function show(t, animate){
     if (animate && !calm){ root.classList.add("switching"); setTimeout(function(){ root.classList.remove("switching"); }, 350); }
     root.setAttribute("data-theme", t);
-    sw.setAttribute("aria-pressed", t === "dark" ? "true" : "false");
-    $("theme-color").setAttribute("content", t === "dark" ? "#15181D" : "#F2EFE8");
+    for (var i = 0; i < modeBtns.length; i++) modeBtns[i].setAttribute("aria-checked", modeBtns[i].getAttribute("data-t") === t ? "true" : "false");
+    $("theme-color").setAttribute("content", COLORS[t]);
+    if (t === "biber") biber();
   }
-  show(root.getAttribute("data-theme") || "light", false);
-  sw.addEventListener("click", function(){
-    var t = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
-    show(t, true);
+  /* a new mode spreads out from its button like dusk falling, where the browser can draw that */
+  function choose(t, btn){
+    if (t === root.getAttribute("data-theme")) return;
+    if (document.startViewTransition && !calm && btn){
+      var r = btn.getBoundingClientRect();
+      root.style.setProperty("--vx", Math.round(r.left + r.width / 2) + "px");
+      root.style.setProperty("--vy", Math.round(r.top + r.height / 2) + "px");
+      document.startViewTransition(function(){ show(t, false); });
+    } else show(t, true);
     try { localStorage.setItem("theme", t); } catch (e) {}
+    if (t === "biber") hello();
+  }
+  sw.addEventListener("click", function(e){ var b = e.target.closest("button"); if (b) choose(b.getAttribute("data-t"), b); });
+  sw.addEventListener("keydown", function(e){
+    if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+    var i = (ORDER.indexOf(root.getAttribute("data-theme")) + (e.key === "ArrowRight" ? 1 : 2)) % 3;
+    choose(ORDER[i], modeBtns[i]); modeBtns[i].focus(); e.preventDefault();
   });
   matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function(e){
     var saved = null;
     try { saved = localStorage.getItem("theme"); } catch (x) {}
-    if (saved !== "light" && saved !== "dark") show(e.matches ? "dark" : "light", true);
+    if (ORDER.indexOf(saved) < 0) show(e.matches ? "dark" : "light", true);
   });
+
+  /* ---- Biber mode: the pond at dusk (built once, the first time it is used) ---- */
+  var flies = $("flies"), night = $("night"), lantern = $("lantern"), toast = $("toast");
+  var built = false, ffs = [], told = false, toastT = 0;
+  function R(a, b){ return a + Math.random() * (b - a); }
+  function biber(){
+    if (built || calm) return;
+    built = true;
+    /* fireflies in three depths: small far ones, middle ones, and three big soft glows (all behind the page's content) */
+    var many = 16;
+    for (var i = 0; i < many; i++){
+      var depth = i < 3 ? "near" : i % 2 ? "far" : "mid";
+      var w = document.createElement("i"), b = document.createElement("b");
+      var s = depth === "near" ? R(56, 84) : depth === "far" ? R(7, 10) : R(12, 19), d = depth === "near" ? R(34, 48) : R(16, 30);
+      w.className = "ff " + depth;
+      w.style.cssText = "--x:" + R(2, 96).toFixed(1) + "%;--y:" + R(8, 94).toFixed(1) + "%";
+      b.style.cssText = "--s:" + Math.round(s) + "px;--d:" + d.toFixed(1) + "s;--n:" + Math.round(d * 6) + ";--dl:-" + R(0, 30).toFixed(1) + "s;--g:" + R(2.6, 5).toFixed(1) +
+        "s;--ax:" + Math.round(R(-60, 60)) + "px;--ay:" + Math.round(R(-50, 50)) + "px;--bx:" + Math.round(R(-90, 90)) + "px;--by:" + Math.round(R(-70, 40)) +
+        "px;--cx:" + Math.round(R(-60, 60)) + "px;--cy:" + Math.round(R(-40, 60)) + "px";
+      w.appendChild(b);
+      flies.appendChild(w);
+      if (depth !== "near") ffs.push(w);
+    }
+    /* the night over the hero: a moon with a bite out of it, stars, a shooting star now and then, and a constellation shaped like our beaver */
+    var h = '<i class="halo"></i><i class="moon"></i><i class="shoot"></i>';
+    for (var k = 0; k < 44; k++){
+      var tw = k % 6 === 0;
+      h += '<i class="st' + (tw ? " tw" : "") + '" style="--x:' + R(1, 99).toFixed(1) + "%;--y:" + R(2, 64).toFixed(1) + "%;--s:" + (Math.random() < .8 ? 2 : 3) +
+        "px;--o:" + R(.35, .9).toFixed(2) + (tw ? ";--d:" + R(2.5, 5).toFixed(1) + "s;--dl:-" + R(0, 5).toFixed(1) + "s" : "") + '"></i>';
+    }
+    var P = [[24, 14], [34, 30], [14, 44], [18, 108], [50, 122], [90, 122], [122, 108], [126, 44], [106, 30], [116, 14]], svg = "";
+    for (var j = 0; j < P.length - 1; j++) svg += '<line x1="' + P[j][0] + '" y1="' + P[j][1] + '" x2="' + P[j + 1][0] + '" y2="' + P[j + 1][1] + '"/>';
+    svg += '<line x1="34" y1="30" x2="106" y2="30"/>';
+    P.concat([[46, 66], [94, 66], [62, 134], [78, 134]]).forEach(function(p, n){
+      svg += '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="' + (n > 9 ? 2.2 : n % 4 ? 2.6 : 3.4) + '"' + (n % 5 === 2 ? ' class="tw"' : "") + "/>";
+    });
+    night.innerHTML = h + '<svg class="constel" viewBox="0 0 140 140">' + svg + "</svg>";
+    guard();
+  }
+  /* if this machine cannot keep up, keep only the calm parts */
+  function guard(){
+    setTimeout(function(){
+      var n = 0, slow = 0, t0 = 0, last = 0;
+      requestAnimationFrame(function f(t){
+        if (!t0){ t0 = last = t; } else { n++; if (t - last > 30) slow++; last = t; }
+        if (t - t0 < 2000) requestAnimationFrame(f);
+        else if (n > 10 && slow / n > .2) root.classList.add("biber-lite");
+      });
+    }, 1600);
+  }
+  function hello(){
+    if (told || calm) return;
+    told = true;
+    toast.textContent = matchMedia("(hover: hover)").matches ? "Biber mode: the pond at dusk. Move your mouse, the fireflies will follow you."
+      : "Biber mode: the pond at dusk. Tap anywhere to send a ripple across the water.";
+    setTimeout(function(){ toast.classList.add("show"); }, 900);
+    clearTimeout(toastT);
+    toastT = setTimeout(function(){ toast.classList.remove("show"); }, 6000);
+  }
+  /* the lantern follows the mouse, and the fireflies close to it drift its way */
+  var lx = 0, ly = 0, lraf = 0, lastPull = 0, idleT = 0;
+  addEventListener("pointermove", function(e){
+    if (e.pointerType !== "mouse" || calm || !built || root.getAttribute("data-theme") !== "biber") return;
+    lx = e.clientX; ly = e.clientY;
+    if (!lraf) lraf = requestAnimationFrame(function(){
+      lraf = 0;
+      lantern.style.transform = "translate3d(" + (lx - 190) + "px," + (ly - 190) + "px,0)";
+      lantern.classList.add("on");
+    });
+    var now = performance.now();
+    if (now - lastPull > 150){ lastPull = now; pull(true); }
+    clearTimeout(idleT);
+    idleT = setTimeout(function(){ pull(false); lantern.classList.remove("on"); }, 2600);
+  }, {passive: true});
+  function pull(on){
+    var lite = root.classList.contains("biber-lite");
+    for (var i = 0; i < ffs.length; i++){
+      var f = ffs[i], tx = 0, ty = 0;
+      if (on && !lite){
+        var r = f.getBoundingClientRect(), dx = lx - (r.left - (f._x || 0)), dy = ly - (r.top - (f._y || 0)), dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 320){ var k = .2 + .5 * (1 - dist / 320); tx = Math.round(dx * k); ty = Math.round(dy * k); }
+      }
+      if (tx !== (f._x || 0) || ty !== (f._y || 0)){
+        f._x = tx; f._y = ty;
+        f.style.transform = tx || ty ? "translate(" + tx + "px," + ty + "px)" : "";
+      }
+    }
+  }
+  /* every tap sends ripples across the water, and a few wood chips fly */
+  var RING = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.6" vector-effect="non-scaling-stroke"/></svg>';
+  function drop(el, x, y){ el.style.left = x + "px"; el.style.top = y + "px"; el.addEventListener("animationend", function(){ el.remove(); }); document.body.appendChild(el); }
+  document.addEventListener("pointerdown", function(e){
+    if (calm || root.getAttribute("data-theme") !== "biber" || e.target.closest(".theme,.pv")) return;
+    for (var k = 0; k < 3; k++){
+      var r = document.createElement("i");
+      r.className = "ripple";
+      r.innerHTML = RING;
+      r.style.setProperty("--rd", (k * .16) + "s");
+      r.style.setProperty("--rs", 5 + k * 1.6);
+      drop(r, e.clientX, e.clientY);
+    }
+    for (var c = 0; c < 6; c++){
+      var ch = document.createElement("i"), a = c / 6 * 6.283 + Math.random() * .6, d = 34 + Math.random() * 40;
+      ch.className = "chip";
+      ch.style.setProperty("--dx", (Math.cos(a) * d).toFixed(1) + "px");
+      ch.style.setProperty("--dy", (Math.sin(a) * d - 16).toFixed(1) + "px");
+      drop(ch, e.clientX, e.clientY);
+    }
+  }, {passive: true});
+  show(root.getAttribute("data-theme") || "light", false);
 
   /* ---- header: shadow once scrolled, reading progress ---- */
   var top = $("top"), bar = $("progress"), ticking = false;
@@ -651,21 +1094,19 @@ footer .legal{flex-basis:100%;margin:0;font-size:.84rem}
   }, {passive: true});
   document.documentElement.addEventListener("pointerleave", function(){ tilt.style.setProperty("--rx", "0deg"); tilt.style.setProperty("--ry", "0deg"); });
 
-  var lines = ["Hey!", "That tickles!", "Boop!", "Again?", "Okay, okay...", "You're persistent!",
+  var lines = ["Hey!", "That tickles!", "Boop!", "Psst... try Biber mode, up there by the moon.", "Okay, okay...", "You're persistent!",
     'Psst... want a secret? <a href="#workshop" id="peek">Peek at the workshop</a>', "Fine. One more boop.", "I'm a busy beaver, you know!"];
   var boops = 0, hideT = 0;
   if (!calm) setTimeout(function(){ if (!boops) hint.classList.add("show"); }, 1800);
+  function lightWorkshop(){ $("workshop").classList.add("lit"); setTimeout(function(){ $("workshop").classList.remove("lit"); }, 2600); }
   beaver.addEventListener("click", function(){
     boops++;
     hint.classList.remove("show");
     bubble.innerHTML = lines[Math.min(boops - 1, lines.length - 1)];
     bubble.classList.add("show");
     clearTimeout(hideT);
-    hideT = setTimeout(function(){ bubble.classList.remove("show"); }, boops === 7 ? 6000 : 1800);
-    if (boops === 7){
-      var p = $("peek");
-      if (p) p.addEventListener("click", function(){ $("workshop").classList.add("lit"); setTimeout(function(){ $("workshop").classList.remove("lit"); }, 2600); });
-    }
+    hideT = setTimeout(function(){ bubble.classList.remove("show"); }, boops === 7 ? 6000 : boops === 4 ? 3200 : 1800);
+    if (boops === 7){ var p = $("peek"); if (p) p.addEventListener("click", lightWorkshop); }
     if (calm) return;
     beaver.classList.remove("hop"); void beaver.offsetWidth; beaver.classList.add("hop");
     for (var i = 0; i < 9; i++){
@@ -678,6 +1119,7 @@ footer .legal{flex-basis:100%;margin:0;font-size:.84rem}
     }
   });
   beaver.addEventListener("animationend", function(e){ if (e.animationName === "hop") beaver.classList.remove("hop"); });
+  $("to-workshop").addEventListener("click", lightWorkshop);
 
   /* ---- copy the e-mail address ---- */
   var copy = $("copy");
@@ -690,7 +1132,7 @@ footer .legal{flex-basis:100%;margin:0;font-size:.84rem}
       $("copied").textContent = "E-mail address copied";
       setTimeout(function(){ copy.classList.remove("done"); copy.querySelector("use").setAttribute("href", "#i-copy"); copy.querySelector("span").textContent = "Copy"; $("copied").textContent = ""; }, 2200);
     }
-    function old(){   /* older browsers, or a clipboard the browser refused */
+    function old(){
       var t = document.createElement("textarea"); t.value = mail; t.setAttribute("readonly", ""); t.style.position = "fixed"; t.style.opacity = "0";
       document.body.appendChild(t); t.select();
       try { if (document.execCommand("copy")) done(); } catch (e) {}
@@ -754,7 +1196,7 @@ footer .legal{flex-basis:100%;margin:0;font-size:.84rem}
       b.classList.add("hold");
       var m = mouth.getBoundingClientRect(), r = b.getBoundingClientRect(), j = jungle.getBoundingClientRect();
       var dx = r.left + r.width / 2 - m.left, dy = r.top + r.height / 2 - m.top, ang = Math.atan2(dy, dx).toFixed(3);
-      tongue.style.transition = "none";   /* aim first, then shoot */
+      tongue.style.transition = "none";
       tongue.style.transform = "rotate(" + ang + "rad) scaleX(0)";
       void tongue.offsetWidth;
       tongue.style.transition = "";
@@ -782,28 +1224,47 @@ footer .legal{flex-basis:100%;margin:0;font-size:.84rem}
     });
   }
 
-  /* the teasers hold still while the page scrolls, and carry on when it stops */
-  var teasers = [pond, jungle].filter(Boolean), hushT = 0, hushed = false;
-  if (teasers.length) addEventListener("scroll", function(){
-    if (!hushed){ hushed = true; teasers.forEach(function(t){ t.classList.add("hush"); }); }
+  /* ---- about: the scene follows the step being read ---- */
+  var scene = $("scene"), steps = document.querySelectorAll("#steps .step"), scN = $("sc-n");
+  function setStep(n){
+    var c = "scene pausable";
+    for (var i = 1; i <= n; i++) c += " g" + i;
+    if (scene.classList.contains("live")) c += " live";
+    scene.className = c;
+    scene.setAttribute("data-step", n);
+    scN.textContent = n;
+    for (var k = 0; k < steps.length; k++) steps[k].classList.toggle("on", +steps[k].getAttribute("data-step") === n);
+  }
+
+  /* while the page scrolls, everything that moves on its own holds still */
+  var hushers = [pond, jungle, flies, night, scene, lantern].filter(Boolean), hushT = 0, hushed = false;
+  addEventListener("scroll", function(){
+    if (!hushed){ hushed = true; hushers.forEach(function(t){ t.classList.add("hush"); }); }
     clearTimeout(hushT);
-    hushT = setTimeout(function(){ hushed = false; teasers.forEach(function(t){ t.classList.remove("hush"); }); }, 180);
+    hushT = setTimeout(function(){ hushed = false; hushers.forEach(function(t){ t.classList.remove("hush"); }); }, 180);
   }, {passive: true});
 
-  /* ---- what is on screen: reveals, live animations, the nav's current section ---- */
+
+  /* ---- what is on screen: reveals, live animations, the nav's current section, the story step ---- */
   if (!("IntersectionObserver" in window)){
     document.querySelectorAll(".rv").forEach(function(el){ el.classList.add("in"); });
     $("sign").classList.add("in");
     return;
   }
   root.classList.add("io");
+  setStep(1);
   var rv = new IntersectionObserver(function(es){ es.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add("in"); rv.unobserve(e.target); } }); }, {threshold: .12});
   document.querySelectorAll(".rv,#sign").forEach(function(el){ rv.observe(el); });
   var live = new IntersectionObserver(function(es){ es.forEach(function(e){
     e.target.classList.toggle("live", e.isIntersecting);
     if (e.target.classList.contains("hero")) heroLive = e.isIntersecting;
   }); }, {rootMargin: "60px"});
-  document.querySelectorAll(".pausable").forEach(function(el){ live.observe(el); });
+  document.querySelectorAll(".pausable").forEach(function(el){ if (el !== flies) live.observe(el); });
+  flies.classList.add("live");
+  var wide = matchMedia("(min-width: 900px)").matches;
+  var stepIO = new IntersectionObserver(function(es){ es.forEach(function(e){ if (e.isIntersecting) setStep(+e.target.getAttribute("data-step")); }); },
+    {rootMargin: wide ? "-46% 0px -46% 0px" : "-62% 0px -30% 0px"});
+  steps.forEach(function(s){ stepIO.observe(s); });
   var links = {};
   document.querySelectorAll('.top nav a').forEach(function(a){ links[a.getAttribute("href").slice(1)] = a; });
   var spy = new IntersectionObserver(function(es){ es.forEach(function(e){
