@@ -7,6 +7,7 @@
 <meta name="robots" content="noindex">
 <meta name="theme-color" id="theme-color" content="#F2EFE8">
 <link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/img/favicon-32.png" type="image/png" sizes="32x32">
 <link rel="icon" href="/img/favicon-48.png" type="image/png" sizes="48x48">
 <script>
 (function(){
@@ -27,7 +28,7 @@
 *{box-sizing:border-box}
 body{margin:0;min-height:100vh;display:grid;place-items:center;padding:32px 16px;background:var(--bg) var(--rings) center/cover no-repeat;color:var(--ink);font:400 1.05rem/1.55 "Space Grotesk",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;text-align:center}
 main{max-width:520px}
-.log{position:relative;width:170px;height:170px;margin:0 auto 26px}
+.log{position:relative;width:170px;height:170px;margin:0 auto 18px}
 .log svg{display:block;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 18px 22px rgba(0,0,0,.22))}
 .bf{fill:#7A4B26}.tf{fill:#4E2F17}.tb rect,.be{fill:#F0A33C}.bt{fill:#F2EFE8}
 .lean{transform-box:fill-box;transform-origin:50% 100%;animation:lean 1.8s ease-in-out infinite}
@@ -41,8 +42,18 @@ main{max-width:520px}
 .fall{transform-box:fill-box;transform-origin:center;animation:fall 1.3s cubic-bezier(.5,0,.9,.6) forwards}
 @keyframes fall{0%{transform:translate(0,0) rotate(0)}100%{transform:translate(var(--dx),var(--dy)) rotate(260deg)}}
 @media(prefers-reduced-motion:reduce){.lean{animation:none}}
-.code{margin:0 0 6px;font-family:"Biber Display","Space Grotesk",sans-serif;font-size:1rem;letter-spacing:.3em;color:var(--honey)}
-h1{margin:0 0 12px;font-family:"Biber Display","Space Grotesk",sans-serif;font-weight:700;font-size:clamp(2rem,7vw,2.9rem);line-height:1.05}
+.code{margin:6px 0 4px;font-family:"Biber Display","Space Grotesk",sans-serif;font-weight:700;font-size:clamp(5.2rem,24vw,8.6rem);line-height:.9;letter-spacing:.04em;color:var(--honey)}
+.game{min-height:2.9em;margin:-8px 0 4px;font-size:.92rem;line-height:1.45;font-weight:600;color:var(--ink)}
+.game b{color:#A85F09}
+:root[data-theme="dark"] .game b,:root[data-theme="biber"] .game b{color:var(--honey)}
+.hit{cursor:pointer}
+.run{transition:transform .45s cubic-bezier(.5,0,.8,.4),opacity .35s .1s}
+.tiny.gone .run{transform:translate(230px,-260px) rotate(40deg);opacity:0}
+.tiny.back .run{transition:transform .5s cubic-bezier(.2,.8,.3,1.2),opacity .2s}
+.won svg{cursor:pointer}
+.pop{font:700 15px "Biber Display","Space Grotesk",sans-serif;fill:var(--honey);animation:pop .8s ease-out forwards}
+@keyframes pop{to{transform:translateY(-26px);opacity:0}}
+h1{margin:0 0 12px;font-family:"Biber Display","Space Grotesk",sans-serif;font-weight:700;font-size:clamp(1.7rem,6.2vw,2.5rem);line-height:1.05}
 p{margin:0 0 26px;color:var(--muted)}
 a.btn{display:inline-flex;align-items:center;gap:10px;min-height:52px;padding:0 24px;border-radius:14px;background:var(--ink);color:var(--bg);font-weight:600;text-decoration:none;transition:transform .2s}
 a.btn:hover{transform:translateY(-2px)}
@@ -65,7 +76,8 @@ a.btn:focus-visible{outline:3px solid var(--honey);outline-offset:3px}
           <g id="gr" stroke="#9C5212" stroke-opacity=".5" stroke-width="1.2" stroke-linecap="round"><path d="M123.4 9.4 l-6.3 -0.8"/><path d="M125.6 14.6 l-5.8 0.1"/><path d="M127.1 20.2 l-5.1 0.9"/><path d="M125.8 26.4 l-6.8 2.3"/><path d="M127.8 31.1 l-6.1 3.0"/><path d="M130.8 37.3 l-4.0 3.0"/><path d="M133.3 43.9 l-4.4 4.5"/><path d="M141.3 43.5 l-3.5 5.0"/><path d="M146.5 47.3 l-3.2 6.8"/><path d="M149.3 54.2 l-2.1 6.6"/><path d="M155.2 54.3 l-0.9 5.1"/><path d="M161.2 49.9 l-0.2 7.9"/><path d="M166.3 54.3 l0.5 4.4"/></g>
         </g>
       </g>
-      <g class="tiny" id="tiny" transform="translate(153 52) scale(.3)">
+      <g class="tiny" id="tiny" transform="translate(153 52) scale(.3)"><g class="run">
+        <rect class="hit" x="-75" y="-165" width="170" height="185" fill="transparent"/>
         <g class="lean">
           <rect class="tf" x="14" y="-30" width="48" height="22" rx="8" transform="rotate(-12 14 -19)"/>
           <g class="tb" transform="rotate(-12 14 -19)"><rect x="26" y="-26" width="5" height="5" rx="1"/><rect x="34" y="-26" width="5" height="5" rx="1"/><rect x="42" y="-26" width="5" height="5" rx="1"/><rect x="26" y="-18" width="5" height="5" rx="1"/><rect x="34" y="-18" width="5" height="5" rx="1"/><rect x="42" y="-18" width="5" height="5" rx="1"/></g>
@@ -78,10 +90,11 @@ a.btn:focus-visible{outline:3px solid var(--honey);outline-offset:3px}
             <rect class="bt" x="49" y="79" width="10" height="17"/><rect class="bt" x="61" y="79" width="10" height="17"/>
           </g></g>
         </g>
-      </g>
+      </g></g>
       <g class="crumbs" id="crumbs"><polygon class="cr pile" transform="translate(176 163) rotate(57)" points="7.2,1.3 4.8,4.6 -0.3,5.9 -6.1,2.4 -6.1,-1.3 -2.7,-4.8 5.4,-3.4"/><polygon class="cr pile" transform="translate(186 168) rotate(76)" points="4.8,1.1 1.6,2.7 -1.1,3.7 -3.7,0.8 -2.2,-2.2 2.1,-3.2"/><polygon class="cr pile" transform="translate(168 170) rotate(25)" points="3.4,-0.5 2.6,1.4 -1.1,2.7 -4.3,1.4 -3.4,-0.5 -0.3,-3.0 1.4,-2.9"/><polygon class="cr pile" transform="translate(181 173) rotate(13)" points="4.6,-1.0 2.9,2.2 -2.7,3.0 -4.0,-0.8 -3.4,-4.0 2.6,-4.0"/><polygon class="cr pile" transform="translate(193 173) rotate(25)" points="2.6,-0.3 2.9,2.4 -1.0,2.1 -2.2,1.3 -3.7,-0.6 -1.4,-2.6 1.8,-1.8"/><polygon class="cr pile" transform="translate(160 174) rotate(16)" points="2.4,0.2 1.4,1.8 -1.4,2.9 -2.7,-0.5 -0.8,-2.1 1.6,-2.6"/></g>
     </svg>
   </div>
+  <p class="game" id="game" aria-live="polite"></p>
   <p class="code">404</p>
   <h1>This page got gnawed away.</h1>
   <p>A beaver got here first. The games are all still in one piece, though.</p>
@@ -113,9 +126,16 @@ a.btn:focus-visible{outline:3px solid var(--honey);outline-offset:3px}
     gr.innerHTML = g;
     tiny.setAttribute("transform", "translate(" + (CX - .139 * R - 4).toFixed(1) + " " + (CY + .99 * R + 2).toFixed(1) + ") scale(.3)");
   }
-  if (!document.documentElement.classList.contains("js")){ draw(36); return; }   /* animations off: one still bite */
-  var R = R0, n = 0;
-  draw(R);
+  var msg = document.getElementById("game"), log = document.querySelector(".log");
+  if (!document.documentElement.classList.contains("js")){ draw(36); return; }   /* animations off: one still bite, no game */
+  /* the mini game: shoo the tiny beaver away. It always comes back, a little hungrier each time.
+     If it gnaws all the way to the big beaver's ear it wins, and a tap on the logo fixes it for another round. */
+  var R = R0, n = 0, state = "gnaw", shooed = 0, gap = 560, best = 0, timer = null;
+  try { best = +localStorage.getItem("shoo-best") || 0; } catch (e) {}
+  function say(h){ msg.innerHTML = h; }
+  function intro(){ say("Psst... <b>tap the little beaver</b> to shoo it away!"); }
+  function score(){ say("Shooed <b>" + shooed + "</b> " + (shooed === 1 ? "time" : "times") + ". It always comes back..." + (best ? " Best: " + best : "")); }
+  draw(R); intro();
   function crumb(){
     var m = pt(232, R), gEl = document.createElementNS(NS, "g"), c = document.createElementNS(NS, "polygon"), s = 2.6 + rnd() * 2.6, k = 5 + Math.floor(rnd() * 3), q = [];
     for (var i = 0; i < k; i++){ var an = 2 * Math.PI * i / k + rnd() * .6 - .3, rr = s * (.6 + rnd() * .4); q.push((rr * Math.cos(an)).toFixed(1) + "," + (rr * Math.sin(an) * .8).toFixed(1)); }
@@ -124,16 +144,49 @@ a.btn:focus-visible{outline:3px solid var(--honey);outline-offset:3px}
     gEl.appendChild(c); crumbs.appendChild(gEl);
     gEl.addEventListener("animationend", function(){ gEl.remove(); });
   }
-  var timer = setInterval(function(){
-    if (document.hidden) return;
+  function bite(){
+    if (document.hidden || state !== "gnaw") return;
     tiny.classList.add("down");
     setTimeout(function(){
       tiny.classList.remove("down");
+      if (state !== "gnaw") return;
       R = Math.min(R1, R + STEP); n++; draw(R); crumb();
       if (n % 7 === 1 && pile[(n - 1) / 7]) pile[(n - 1) / 7].classList.add("on");
-      if (R >= R1){ clearInterval(timer); tiny.classList.add("full"); }
+      if (R >= R1) win();
     }, 140);
-  }, 560);
+  }
+  function run(){ clearInterval(timer); timer = setInterval(bite, gap); }
+  function win(){
+    state = "won"; clearInterval(timer); tiny.classList.add("full"); log.classList.add("won");
+    if (shooed > best){ best = shooed; try { localStorage.setItem("shoo-best", best); } catch (e) {} }
+    say("The beaver won! You shooed it <b>" + shooed + "</b> " + (shooed === 1 ? "time" : "times") + ". <b>Tap the logo</b> to fix it.");
+  }
+  function pop(){
+    var p = pt(250, R), tx = document.createElementNS(NS, "text");
+    tx.setAttribute("class", "pop"); tx.setAttribute("x", (p[0] + 6).toFixed(0)); tx.setAttribute("y", (p[1] - 30).toFixed(0)); tx.textContent = "+1";
+    tiny.parentNode.appendChild(tx); tx.addEventListener("animationend", function(){ tx.remove(); });
+  }
+  tiny.addEventListener("pointerdown", function(e){
+    if (state !== "gnaw") return;
+    e.stopPropagation();
+    state = "gone"; shooed++; gap = Math.max(260, gap - 30); pop(); score();
+    tiny.classList.remove("down", "back"); tiny.classList.add("gone");
+    setTimeout(function(){                                     /* back it comes, hungrier */
+      tiny.classList.remove("gone"); tiny.classList.add("back"); state = "gnaw"; run();
+    }, 1100 + rnd() * 1100);
+  });
+  log.addEventListener("pointerdown", function(){
+    if (state !== "won") return;
+    state = "heal"; log.classList.remove("won");
+    var from = R, t0 = performance.now();
+    (function step(now){                                       /* the logo grows back, the crumbs are swept up */
+      var k = Math.min(1, (now - t0) / 700); R = from + (R0 - from) * (1 - Math.pow(1 - k, 3)); draw(R);
+      if (k < 1) return requestAnimationFrame(step);
+      for (var i = 0; i < pile.length; i++) pile[i].classList.remove("on");
+      n = 0; shooed = 0; gap = 560; tiny.classList.remove("full"); state = "gnaw"; intro(); run();
+    })(t0);
+  });
+  run();
 })();
 </script>
 </body>
